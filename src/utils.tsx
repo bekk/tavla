@@ -22,12 +22,20 @@ import { Departure, LegMode, TransportSubmode } from '@entur/sdk'
 
 import { LineData, TileSubLabel } from './types'
 
+export function isNotNullOrUndefined<T>(
+    thing: T | null | undefined,
+): thing is T {
+    return thing !== undefined && thing !== null
+}
+
 function isSubModeAirportLink(subMode?: string): boolean {
+    if (!subMode) return false
     const airportLinkTypes = ['airportLinkRail', 'airportLinkBus']
     return airportLinkTypes.includes(subMode)
 }
 
 function isSubModeCarFerry(subMode?: string): boolean {
+    if (!subMode) return false
     const carFerryTypes = [
         'localCarFerry',
         'internationalCarFerry',
@@ -41,7 +49,7 @@ function isSubModeCarFerry(subMode?: string): boolean {
 export function getIconColor(
     type: LegMode,
     subType?: TransportSubmode,
-): string {
+): string | null {
     if (isSubModeAirportLink(subType)) return colors.transport.contrast.plane
 
     switch (type) {
@@ -107,7 +115,7 @@ export function getIcon(
     legMode: LegMode,
     subMode?: TransportSubmode,
     color?: string,
-): JSX.Element {
+): JSX.Element | null {
     const colorToUse = color ?? getIconColor(legMode, subMode)
 
     const identifier = getTransportIconIdentifier(legMode, subMode)
@@ -134,7 +142,7 @@ export function getIcon(
     }
 }
 
-export function groupBy<T>(
+export function groupBy<T extends { [key: string]: any }>(
     objectArray: Array<T>,
     property: string,
 ): { [key: string]: Array<T> } {
@@ -145,7 +153,7 @@ export function groupBy<T>(
         }
         acc[key].push(obj)
         return acc
-    }, {})
+    }, {} as { [key: string]: Array<T> })
 }
 
 function formatDeparture(minDiff: number, departureTime: Date): string {
@@ -177,17 +185,19 @@ export function transformDepartureToLineData(departure: Departure): LineData {
         cancellation,
     } = departure
 
-    const { line } = serviceJourney.journeyPattern
+    const { line } = serviceJourney.journeyPattern || {}
 
     const departureTime = parseISO(expectedDepartureTime)
     const minDiff = differenceInMinutes(departureTime, new Date())
 
-    const route = `${line.publicCode || ''} ${
+    const route = `${line?.publicCode || ''} ${
         destinationDisplay.frontText
     }`.trim()
 
     const transportMode =
-        line.transportMode === 'coach' ? 'bus' : line.transportMode
+        line?.transportMode === 'coach'
+            ? 'bus'
+            : line?.transportMode || 'unknown'
     const subType = departure.serviceJourney.transportSubmode
 
     return {

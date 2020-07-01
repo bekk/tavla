@@ -60,9 +60,9 @@ interface SetOptions {
 type Persistor = () => void
 
 export const SettingsContext = createContext<
-    [Settings | null, SettingsSetters, Persistor]
+    [Settings | undefined, SettingsSetters, Persistor]
 >([
-    null,
+    undefined,
     {
         setHiddenStations: (): void => undefined,
         setHiddenStops: (): void => undefined,
@@ -76,7 +76,11 @@ export const SettingsContext = createContext<
     (): void => console.log('Persistor not set up yet'), // eslint-disable-line no-console
 ])
 
-export function useSettingsContext(): [Settings, SettingsSetters, Persistor] {
+export function useSettingsContext(): [
+    Settings | undefined,
+    SettingsSetters,
+    Persistor,
+] {
     return useContext(SettingsContext)
 }
 
@@ -88,19 +92,25 @@ const getDocumentId = (): string | undefined => {
     }
 }
 
-export function useSettings(): [Settings, SettingsSetters, Persistor] {
-    const [settings, setSettings] = useState<Settings>()
+export function useSettings(): [
+    Settings | undefined,
+    SettingsSetters,
+    Persistor,
+] {
+    const [settings, setSettings] = useState<Settings | undefined>()
 
     const firebaseInitialized = useIsFirebaseInitialized()
 
     const location = useLocation()
 
+    const documentId = getDocumentId()
+
     useEffect(() => {
         if (location.pathname == '/' || !firebaseInitialized) return
 
-        async function loadSettings(): Promise<Settings> {
-            if (getDocumentId()) {
-                setSettings(await restoreFromFirebase(getDocumentId()))
+        async function loadSettings(): Promise<void> {
+            if (documentId) {
+                setSettings(await restoreFromFirebase(documentId))
                 return
             }
 
@@ -121,30 +131,31 @@ export function useSettings(): [Settings, SettingsSetters, Persistor] {
         }
 
         loadSettings()
-    }, [firebaseInitialized, location])
+    }, [firebaseInitialized, location, documentId])
 
     const persistSettings = useCallback(() => {
-        if (getDocumentId()) {
-            persistToFirebase(getDocumentId(), settings)
+        if (!settings) return
+        if (documentId) {
+            persistToFirebase(documentId, settings)
         } else {
             persistToUrl(settings)
         }
-    }, [settings])
+    }, [settings, documentId])
 
     const set = useCallback(
         <T>(key: string, value: FieldValue, options?: SetOptions): void => {
-            const newSettings = { ...settings, [key]: value }
+            const newSettings = { ...settings, [key]: value } as Settings
             setSettings(newSettings)
 
             if (!options || !options.persist) return
 
-            if (getDocumentId()) {
-                persistToFirebase(getDocumentId(), newSettings)
+            if (documentId) {
+                persistToFirebase(documentId, newSettings)
                 return
             }
             persistToUrl(newSettings)
         },
-        [settings],
+        [settings, documentId],
     )
 
     const setHiddenStations = useCallback(

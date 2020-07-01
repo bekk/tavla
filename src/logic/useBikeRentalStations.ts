@@ -6,11 +6,12 @@ import { useSettingsContext, Settings } from '../settings'
 import { REFRESH_INTERVAL } from '../constants'
 
 import useNearestPlaces from './useNearestPlaces'
+import { isNotNullOrUndefined } from '../utils'
 
 async function fetchBikeRentalStations(
     settings: Settings,
     nearestBikeRentalStations: Array<string>,
-): Promise<Array<BikeRentalStation> | null> {
+): Promise<BikeRentalStation[]> {
     const { newStations, hiddenStations, hiddenModes } = settings
 
     if (hiddenModes.includes('bicycle')) {
@@ -22,7 +23,7 @@ async function fetchBikeRentalStations(
         .filter((id, index, ids) => ids.indexOf(id) === index)
 
     const allStations = await service.getBikeRentalStations(allStationIds)
-    return allStations
+    return allStations.filter(isNotNullOrUndefined)
 }
 
 export default function useBikeRentalStations(): Array<
@@ -33,8 +34,8 @@ export default function useBikeRentalStations(): Array<
         BikeRentalStation
     > | null>(null)
     const nearestPlaces = useNearestPlaces(
-        settings.coordinates,
-        settings.distance,
+        settings?.coordinates,
+        settings?.distance,
     )
 
     const nearestBikeRentalStations = useMemo(
@@ -46,6 +47,8 @@ export default function useBikeRentalStations(): Array<
     )
 
     useEffect(() => {
+        if (!settings) return
+
         fetchBikeRentalStations(settings, nearestBikeRentalStations).then(
             setBikeRentalStations,
         )

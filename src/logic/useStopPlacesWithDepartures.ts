@@ -2,7 +2,11 @@ import { useState, useEffect, useMemo } from 'react'
 import { LegMode } from '@entur/sdk'
 
 import { StopPlaceWithDepartures } from '../types'
-import { transformDepartureToLineData, unique } from '../utils'
+import {
+    transformDepartureToLineData,
+    unique,
+    isNotNullOrUndefined,
+} from '../utils'
 import service from '../service'
 import { useSettingsContext, Settings } from '../settings'
 import { REFRESH_INTERVAL } from '../constants'
@@ -12,7 +16,7 @@ import useNearestPlaces from './useNearestPlaces'
 async function fetchStopPlaceDepartures(
     settings: Settings,
     nearestStopPlaces: Array<string>,
-): Promise<Array<StopPlaceWithDepartures>> {
+): Promise<StopPlaceWithDepartures[]> {
     const { newStops, hiddenStops, hiddenModes, hiddenRoutes } = settings
 
     const allStopPlaceIds = unique([...newStops, ...nearestStopPlaces]).filter(
@@ -26,9 +30,12 @@ async function fetchStopPlaceDepartures(
     const allStopPlaces = await service.getStopPlaces(
         allStopPlaceIdsWithoutDuplicateNumber,
     )
-    const sortedStops = allStopPlaces.sort((a, b) =>
-        a.name.localeCompare(b.name, 'no'),
-    )
+    const sortedStops = allStopPlaces.sort((a, b) => {
+        if (!a && !b) return 0
+        if (!a) return -1
+        if (!b) return 1
+        return a.name.localeCompare(b.name, 'no')
+    })
 
     const whiteListedModes = Object.values(LegMode).filter(
         (mode: LegMode) => !hiddenModes.includes(mode),
@@ -44,33 +51,39 @@ async function fetchStopPlaceDepartures(
         },
     )
 
-    const stopPlacesWithDepartures = allStopPlaceIds.map(stopId => {
-        const stop = sortedStops.find(
-            ({ id }) => id === stopId.replace(/-\d+$/, ''),
-        )
-        const departuresForThisStopPlace = departures.find(
-            ({ id }) => stop.id === id,
-        )
-        if (
-            !departuresForThisStopPlace ||
-            !departuresForThisStopPlace.departures
-        ) {
-            return stop
-        }
-
-        const mappedAndFilteredDepartures = departuresForThisStopPlace.departures
-            .map(transformDepartureToLineData)
-            .filter(
-                ({ route }) =>
-                    !hiddenRoutes[stopId] ||
-                    !hiddenRoutes[stopId].includes(route),
+    const stopPlacesWithDepartures: StopPlaceWithDepartures[] = allStopPlaceIds
+        .map(stopId => {
+            const stop = sortedStops.find(
+                stopPlace =>
+                    stopPlace && stopPlace.id === stopId.replace(/-\d+$/, ''),
             )
 
-        return {
-            ...stop,
-            departures: mappedAndFilteredDepartures,
-        }
-    })
+            if (!stop) return
+
+            const departuresForThisStopPlace = departures.find(
+                stopPlace => stopPlace && stop?.id === stopPlace.id,
+            )
+            if (
+                !departuresForThisStopPlace ||
+                !departuresForThisStopPlace.departures
+            ) {
+                return stop
+            }
+
+            const mappedAndFilteredDepartures = departuresForThisStopPlace.departures
+                .map(transformDepartureToLineData)
+                .filter(
+                    ({ route }) =>
+                        !hiddenRoutes[stopId] ||
+                        !hiddenRoutes[stopId].includes(route),
+                )
+
+            return {
+                ...stop,
+                departures: mappedAndFilteredDepartures,
+            }
+        })
+        .filter(isNotNullOrUndefined)
 
     return stopPlacesWithDepartures
 }
@@ -80,8 +93,8 @@ export default function useStopPlacesWithDepartures(): Array<
 > | null {
     const [settings] = useSettingsContext()
     const nearestPlaces = useNearestPlaces(
-        settings.coordinates,
-        settings.distance,
+        settings?.coordinates,
+        settings?.distance,
     )
     const [
         stopPlacesWithDepartures,
@@ -97,6 +110,7 @@ export default function useStopPlacesWithDepartures(): Array<
     )
 
     useEffect(() => {
+        if (!settings) return
         fetchStopPlaceDepartures(settings, nearestStopPlaces).then(
             setStopPlacesWithDepartures,
         )
