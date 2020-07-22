@@ -47,3 +47,9 @@
 .hvr-float:active {
     transform: translateY(-8px);
 }
+
+@media (max-width: 400px) {
+    .bottom_menu_button {
+        padding: 2rem 0.5rem;
+    }
+}
