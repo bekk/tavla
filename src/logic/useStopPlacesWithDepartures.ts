@@ -42,7 +42,7 @@ async function fetchStopPlaceDepartures(
         {
             includeNonBoarding: false,
             limit: 200,
-            limitPerLine: 3,
+            limitPerLine: 5,
         },
     )
 

@@ -47,6 +47,8 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
         IconColorType.CONTRAST,
     )
 
+    console.log(groupedDepartures)
+
     useEffect(() => {
         if (settings) {
             setIconColorType(getIconColorType(settings.theme))
@@ -57,7 +59,7 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
         <Tile title={name} icons={headerIcons}>
             {routes.map((route) => {
                 const subType = groupedDepartures[route][0].subType
-                const routeData = groupedDepartures[route].slice(0, 3)
+                const routeData = groupedDepartures[route].slice(0, 5)
                 const routeType = routeData[0].type
                 const icon = getIcon(routeType, iconColorType, subType)
 
