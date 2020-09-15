@@ -9,6 +9,7 @@ import '../firebase-init'
 import Compact from '../dashboards/Compact'
 import Chrono from '../dashboards/Chrono'
 import Timeline from '../dashboards/Timeline'
+import BusStop from '../dashboards/BusStop'
 
 import LandingPage from './LandingPage'
 import Admin from './Admin'
@@ -38,6 +39,8 @@ function getDashboardComponent(
             return Timeline
         case 'Chrono':
             return Chrono
+        case 'BusStop':
+            return BusStop
         default:
             return Compact
     }
