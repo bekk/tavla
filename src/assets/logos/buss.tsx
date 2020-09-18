@@ -1,9 +1,10 @@
 import React from 'react'
 
 const Buss = (props: Props): JSX.Element => {
+    const isLong = Boolean(props.route.length > 2)
     return (
         <svg
-            width="49px"
+            width={isLong ? '60px' : '49px'}
             height="24px"
             viewBox="0 0 49 24"
             version="1.1"
