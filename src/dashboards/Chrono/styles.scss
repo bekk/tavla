@@ -1,7 +1,4 @@
-
 @import '../../assets/styles/import.scss';
-
-
 
 .chrono {
     &__tiles {
@@ -12,6 +9,7 @@
 
         .tile {
             width: 100%;
+            height: 100%;
             max-height: 75vh;
             overflow-y: scroll;
         }
@@ -21,13 +19,13 @@
         position: relative;
         transition: height 200ms ease;
     }
-    
+
     .react-grid-item {
         transition: all 200ms ease;
         transition-property: left, top;
         z-index: 1;
     }
-    
+
     .react-grid-item::after {
         content: '';
         position: absolute;
@@ -39,26 +37,71 @@
         -webkit-mask-image: -webkit-linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 1) 100%);
         z-index: 1;
     }
-    
+
     .react-grid-item.cssTransforms {
         transition-property: transform;
     }
-    
+
     .react-grid-item.resizing {
         z-index: 1;
         will-change: width, height;
     }
-    
+
     .react-grid-item.react-draggable-dragging {
         transition: none;
         z-index: 3;
         will-change: transform;
     }
-    
+
     .react-grid-item.dropping {
         visibility: hidden;
     }
+  
+    .react-grid-item.react-grid-placeholder {
+        background: var(--tavla-border-color);
+        opacity: 0.2;
+        transition-duration: 100ms;
+        z-index: 2;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+    }
+
+    .react-grid-item > .react-resizable-handle {
+        position: absolute;
+        width: 100%;
+        height: 30px;
+        bottom: 0;
+        cursor: ns-resize;
+        z-index: 2;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .react-grid-item:hover > .react-resizable-handle {
+        opacity: 1;
+    }
+
+    .react-grid-item > .react-resizable-handle::after {
+        content: '';
+        position: absolute;
+        width: 20%;
+        height: 0.25rem;
+        bottom: 0;
+        margin: 0 40%;
+        border-radius: 50vh;
+        background-color: var(--tavla-font-color);
+        opacity: 0.7;
+        transition: bottom 0.3s;
+    }
+
+    .react-grid-item:hover > .react-resizable-handle::after {
+        bottom: 0.5rem;
+    }
 }
+
 @media (max-width: 1000px) {
     .chrono {
         padding: 1.5rem;

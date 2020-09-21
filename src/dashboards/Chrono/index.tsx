@@ -1,5 +1,5 @@
-import React from 'react'
-import { WidthProvider, Responsive, Layouts, Layout } from 'react-grid-layout'
+import React, { useState, useEffect } from 'react'
+import { WidthProvider, Responsive } from 'react-grid-layout'
 
 import { useBikeRentalStations, useStopPlacesWithDepartures } from '../../logic'
 import DashboardWrapper from '../../containers/DashboardWrapper'
@@ -15,10 +15,6 @@ import {
 } from '../../settings/LocalStorage'
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
-
-function onLayoutChange(layouts: Layouts, key: string): void {
-    saveToLocalStorage(key, layouts)
-}
 
 function getDataGrid(index: number): { [key: string]: number } {
     return {
@@ -43,15 +39,20 @@ const ChronoDashboard = ({ history }: Props): JSX.Element => {
             ({ departures }) => departures.length > 0,
         )
     }
+  
+    const numberOfStopPlaces = stopPlacesWithDepartures?.length || 0
 
-    const numberOfStopPlaces = stopPlacesWithDepartures
-        ? stopPlacesWithDepartures.length
-        : 0
     const anyBikeRentalStations =
         bikeRentalStations && bikeRentalStations.length
 
-    const localStorageLayout: Layouts =
-        getFromLocalStorage(history.location.key) || {}
+    const [layouts, setLayouts] = useState(
+        getFromLocalStorage(history.location.key) || {},
+    )
+
+    useEffect(() => {
+        saveToLocalStorage(dashboardKey, layouts)
+    }, [dashboardKey, layouts])
+    
     const extraCols = anyBikeRentalStations ? 1 : 0
 
     const cols = {
@@ -73,15 +74,12 @@ const ChronoDashboard = ({ history }: Props): JSX.Element => {
                 <ResponsiveReactGridLayout
                     key={numberOfStopPlaces}
                     cols={cols}
-                    layouts={localStorageLayout}
+                    layouts={layouts}
                     compactType="horizontal"
                     isResizable={true}
-                    onLayoutChange={(
-                        layout: Layout[],
-                        layouts: Layouts,
-                    ): void => {
+                    onLayoutChange={(): void => {
                         if (numberOfStopPlaces > 0) {
-                            onLayoutChange(layouts, dashboardKey)
+                            setLayouts(layouts)
                         }
                     }}
                 >
