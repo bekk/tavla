@@ -21,6 +21,8 @@ const MapView = ({
         width: 'auto',
         height: window.innerHeight - 124,
         zoom: settings?.zoom ?? DEFAULT_ZOOM,
+        maxZoom: 16,
+        minZoom: 13.5,
     })
 
     const data = 2
@@ -31,13 +33,15 @@ const MapView = ({
             mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
             mapStyle={process.env.MAPBOX_STYLE}
             onViewportChange={(vp): void => {
-                const { width, height, latitude, longitude, zoom } = vp
+                const { zoom, maxZoom, minZoom } = vp
                 setViewPort({
-                    latitude,
-                    longitude,
+                    latitude: settings?.coordinates?.latitude,
+                    longitude: settings?.coordinates?.longitude,
                     width: 'auto',
                     height: window.innerHeight - 124,
                     zoom,
+                    maxZoom,
+                    minZoom,
                 })
             }}
         >
