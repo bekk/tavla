@@ -1,7 +1,5 @@
 import React from 'react'
 
-import BicyleCapacityLogo from './../logos/Bicycle-capacity.svg'
-
 function BicycleCapacity({ capacity, size }: Props): JSX.Element {
     return (
         <svg
