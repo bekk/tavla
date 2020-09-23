@@ -14,7 +14,7 @@ const MapView = ({
     bikeRentalStations,
     stopPlacesWithDepartures,
 }: Props): JSX.Element => {
-    const [settings] = useSettingsContext()
+    const [settings, { setZoom }] = useSettingsContext()
     const [viewport, setViewPort] = useState({
         latitude: settings?.coordinates?.latitude,
         longitude: settings?.coordinates?.longitude,
@@ -34,6 +34,7 @@ const MapView = ({
             mapStyle={process.env.MAPBOX_STYLE}
             onViewportChange={(vp): void => {
                 const { zoom, maxZoom, minZoom } = vp
+                setZoom(zoom)
                 setViewPort({
                     latitude: settings?.coordinates?.latitude,
                     longitude: settings?.coordinates?.longitude,

@@ -58,10 +58,10 @@ const DashboardPickerTab = (): JSX.Element => {
                 />
                 <RadioCard
                     title="Kart"
-                    description="Avgangene visualisert i et kart"
+                    description="Avgangene vises i visualisert i et kart. Viser ikke Sparkesykler, spor/platform eller avvik."
                     cardValue="Map"
                     selected={radioValue === 'Map'}
-                    preview={dashboardImages.SooonSVG}
+                    preview={dashboardImages.Map}
                     callback={(val): void => updateChoice(val)}
                     className="display-wrapper__display-card"
                 />

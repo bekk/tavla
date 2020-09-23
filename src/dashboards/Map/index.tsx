@@ -1,8 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import DashboardWrapper from '../../containers/DashboardWrapper'
-import { DEFAULT_ZOOM } from '../../constants'
-import { useSettingsContext } from '../../settings'
 import { useStopPlacesWithDepartures, useBikeRentalStations } from '../../logic'
 
 import './styles.scss'
