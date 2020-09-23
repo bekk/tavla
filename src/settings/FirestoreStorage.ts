@@ -3,6 +3,7 @@ import {
     removeFromArray,
     deleteDocument,
 } from '../services/firebase'
+import { Coordinates } from '@entur/sdk'
 
 export type FieldTypes =
     | string
@@ -10,6 +11,7 @@ export type FieldTypes =
     | string[]
     | firebase.firestore.GeoPoint
     | { [key: string]: string[] }
+    | Coordinates
     | null
 
 export function persist(
