@@ -120,7 +120,6 @@ export default function useStopPlacesWithDepartures():
     ])
     const hiddenRoutesMemo = useMemo(() => hiddenRoutes, [hiddenRoutes])
 
-
     const isDisabled = Boolean(hiddenModes?.includes('kollektiv'))
 
     useEffect(() => {

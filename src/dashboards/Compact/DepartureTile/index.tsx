@@ -51,11 +51,11 @@ const DepartureTile = ({
         IconColorType.CONTRAST,
     )
 
-    function calculateNumbOfDepatures(numberOfDepartures: LineData[]) {
+    const calculateNumbOfDepatures = (
+        numberOfDepartures: LineData[],
+    ): LineData[] => {
         if (cols === 4) {
             return numberOfDepartures.slice(0, 4)
-        } else if (cols >= 5) {
-            return numberOfDepartures.slice(0, 3)
         } else if (cols >= 5) {
             return numberOfDepartures.slice(0, 3)
         }
