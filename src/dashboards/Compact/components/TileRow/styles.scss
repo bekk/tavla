@@ -32,7 +32,6 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(0.5rem, 1fr));
         font-size: 1.25rem;
-        justify-content: space-b;
     }
 
     &__sublabel {
