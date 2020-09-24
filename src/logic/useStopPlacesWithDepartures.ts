@@ -42,7 +42,7 @@ async function fetchStopPlaceDepartures(
         {
             includeNonBoarding: false,
             limit: 200,
-            limitPerLine: 3,
+            limitPerLine: 5,
         },
     )
 
@@ -119,7 +119,6 @@ export default function useStopPlacesWithDepartures():
         hiddenStopModes,
     ])
     const hiddenRoutesMemo = useMemo(() => hiddenRoutes, [hiddenRoutes])
-
 
     const isDisabled = Boolean(hiddenModes?.includes('kollektiv'))
 

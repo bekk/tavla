@@ -105,6 +105,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             <DepartureTile
                                 key={index}
                                 stopPlaceWithDepartures={stop}
+                                numberOfCols={cols.lg}
                             />
                         </div>
                     ))}

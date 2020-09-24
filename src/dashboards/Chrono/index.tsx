@@ -39,7 +39,7 @@ const ChronoDashboard = ({ history }: Props): JSX.Element => {
             ({ departures }) => departures.length > 0,
         )
     }
-  
+
     const numberOfStopPlaces = stopPlacesWithDepartures?.length || 0
 
     const anyBikeRentalStations =
@@ -52,7 +52,7 @@ const ChronoDashboard = ({ history }: Props): JSX.Element => {
     useEffect(() => {
         saveToLocalStorage(dashboardKey, layouts)
     }, [dashboardKey, layouts])
-    
+
     const extraCols = anyBikeRentalStations ? 1 : 0
 
     const cols = {
