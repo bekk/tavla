@@ -13,12 +13,7 @@ import { isNotNullOrUndefined } from '../utils'
 async function fetchBikeRentalStations(
     allStationIds: string[],
 ): Promise<BikeRentalStation[] | null> {
-    // const allStationIds = [...newStations, ...nearestBikeRentalStations]
-    //     .filter((id) => !hiddenStations.includes(id))
-    //     .filter((id, index, ids) => ids.indexOf(id) === index)
-
     const allStations = await service.getBikeRentalStations(allStationIds)
-    console.log('Bikerentalstations fetch blir kjørt')
     return allStations.filter(isNotNullOrUndefined)
 }
 
@@ -52,14 +47,10 @@ export default function useBikeRentalStations(): BikeRentalStation[] | null {
 
     const isChanged = Boolean(isEqual(allStationIds, prevStationIds))
     useEffect(() => {
-        console.log('isDisabled', isDisabled)
-        console.log('isChanged', isChanged)
         if (isDisabled) {
-            console.log('Bikes are set to null')
             return setBikeRentalStations(null)
         }
         if (!isChanged) {
-            console.log('Er ikke likens')
             fetchBikeRentalStations(allStationIds).then(setBikeRentalStations)
         }
         const intervalId = setInterval(() => {

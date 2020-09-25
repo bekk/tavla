@@ -35,7 +35,6 @@ async function fetchStopPlaceDepartures(
             limitPerLine: 3,
         },
     )
-    console.log('FetchStopPlaceDepartures is run')
     return { sortedStops, departures }
 }
 
