@@ -30,7 +30,8 @@ export default function useNearestPlaces(
         return (): void => {
             ignoreResponse = true
         }
-    }, [distance, position])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [distance, position?.latitude, position?.longitude])
 
     return nearestPlaces
 }
