@@ -1,0 +1,31 @@
+@import '../../../../assets/styles/import.scss';
+@import '../../../../variables.scss';
+
+.departure-tile {
+    border: thin solid #BABBCF;
+    background-color: white;
+    color: $colors-brand-blue;
+    margin: 0rem 1rem 1rem 1rem;
+    padding: 0px 12px 12px 12px;
+    border-radius: 4px;
+    min-width: 200px;
+    height: auto;
+    &__stop{
+        margin-top: 0.25rem;
+    }
+}
+
+.departure-row {
+    display: flex;
+    &__direction {
+        flex: 1;
+        display: flex;
+        justify-self: left;
+        padding-left: 0.25rem;
+    }
+    &__departure {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+}

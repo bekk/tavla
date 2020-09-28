@@ -15,6 +15,7 @@ const MapDashboard = ({ history }: Props): JSX.Element => {
     const bikeRentalStations = useMemo(() => bikeRentalStationsForMemo, [
         bikeRentalStationsForMemo,
     ])
+    console.log('Rental stations', bikeRentalStations)
 
     return (
         <DashboardWrapper
