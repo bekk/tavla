@@ -81,20 +81,20 @@ export default function useStopPlacesWithDepartures():
         allStopPlaceIdsWithoutDuplicateNumber,
     )
 
-    const stopsAndDepartures = useCallback(
-        (Obj: {
+    const formatStopPlacesWithDepartures = useCallback(
+        (stopsAndDepartures: {
             sortedStops: StopPlaceDetails[]
             departures: Array<DeparturesById | undefined>
         }): StopPlaceWithDepartures[] => {
             const formattedStopPlacesWithDepartures = allStopPlaceIds.map(
                 (stopId) => {
-                    const stop = Obj.sortedStops.find(
+                    const stop = stopsAndDepartures.sortedStops.find(
                         ({ id }) => id === stopId.replace(/-\d+$/, ''),
                     )
 
                     if (!stop) return
 
-                    const departuresForThisStopPlace = Obj.departures
+                    const departuresForThisStopPlace = stopsAndDepartures.departures
                         .filter(isNotNullOrUndefined)
                         .find(({ id }) => stop.id === id)
 
@@ -137,12 +137,12 @@ export default function useStopPlacesWithDepartures():
         }
         if (!isStopPlacesEqual) {
             fetchStopPlaceDepartures(allStopPlaceIds)
-                .then(stopsAndDepartures)
+                .then(formatStopPlacesWithDepartures)
                 .then(setStopPlacesWithDepartures)
         }
         const intervalId = setInterval(() => {
             fetchStopPlaceDepartures(allStopPlaceIds)
-                .then(stopsAndDepartures)
+                .then(formatStopPlacesWithDepartures)
                 .then(setStopPlacesWithDepartures)
         }, REFRESH_INTERVAL)
 
@@ -150,9 +150,9 @@ export default function useStopPlacesWithDepartures():
     }, [
         allStopPlaceIds,
         allStopPlaceIdsWithoutDuplicateNumber,
+        formatStopPlacesWithDepartures,
         isDisabled,
         prevStopPlaceIdsWithoutDuplicateNumber,
-        stopsAndDepartures,
     ])
 
     return stopPlacesWithDepartures
