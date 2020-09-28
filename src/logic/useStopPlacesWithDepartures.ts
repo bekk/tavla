@@ -81,7 +81,7 @@ export default function useStopPlacesWithDepartures():
         allStopPlaceIdsWithoutDuplicateNumber,
     )
 
-    const formatStopPlacesWithDepartures = useCallback(
+    const stopsAndDepartures = useCallback(
         (Obj: {
             sortedStops: StopPlaceDetails[]
             departures: Array<DeparturesById | undefined>
@@ -137,12 +137,12 @@ export default function useStopPlacesWithDepartures():
         }
         if (!isStopPlacesEqual) {
             fetchStopPlaceDepartures(allStopPlaceIds)
-                .then(formatStopPlacesWithDepartures)
+                .then(stopsAndDepartures)
                 .then(setStopPlacesWithDepartures)
         }
         const intervalId = setInterval(() => {
             fetchStopPlaceDepartures(allStopPlaceIds)
-                .then(formatStopPlacesWithDepartures)
+                .then(stopsAndDepartures)
                 .then(setStopPlacesWithDepartures)
         }, REFRESH_INTERVAL)
 
@@ -150,9 +150,9 @@ export default function useStopPlacesWithDepartures():
     }, [
         allStopPlaceIds,
         allStopPlaceIdsWithoutDuplicateNumber,
-        formatStopPlacesWithDepartures,
         isDisabled,
         prevStopPlaceIdsWithoutDuplicateNumber,
+        stopsAndDepartures,
     ])
 
     return stopPlacesWithDepartures
