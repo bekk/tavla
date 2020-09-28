@@ -44,21 +44,19 @@ export default function useBikeRentalStations(): BikeRentalStation[] | null {
     const prevStationIds = usePrevious(allStationIds)
 
     const isDisabled = Boolean(hiddenModes?.includes('bysykkel'))
-
-    const isChanged = Boolean(isEqual(allStationIds, prevStationIds))
     useEffect(() => {
+        const isStationsEqual = isEqual(allStationIds, prevStationIds)
         if (isDisabled) {
             return setBikeRentalStations(null)
         }
-        if (!isChanged) {
+        if (!isStationsEqual) {
             fetchBikeRentalStations(allStationIds).then(setBikeRentalStations)
         }
         const intervalId = setInterval(() => {
             fetchBikeRentalStations(allStationIds).then(setBikeRentalStations)
         }, REFRESH_INTERVAL)
         return (): void => clearInterval(intervalId)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isChanged, isDisabled])
+    }, [allStationIds, isDisabled, prevStationIds])
 
     return bikeRentalStations
 }

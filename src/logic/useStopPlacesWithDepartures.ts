@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { isEqual } from 'lodash'
 import { StopPlaceWithDepartures } from '../types'
 import {
@@ -81,59 +81,61 @@ export default function useStopPlacesWithDepartures():
         allStopPlaceIdsWithoutDuplicateNumber,
     )
 
-    const isChanged = Boolean(
-        isEqual(
-            allStopPlaceIdsWithoutDuplicateNumber,
-            prevStopPlaceIdsWithoutDuplicateNumber,
-        ),
+    const formatStopPlacesWithDepartures = useCallback(
+        (Obj: {
+            sortedStops: StopPlaceDetails[]
+            departures: Array<DeparturesById | undefined>
+        }): StopPlaceWithDepartures[] => {
+            const formattedStopPlacesWithDepartures = allStopPlaceIds.map(
+                (stopId) => {
+                    const stop = Obj.sortedStops.find(
+                        ({ id }) => id === stopId.replace(/-\d+$/, ''),
+                    )
+
+                    if (!stop) return
+
+                    const departuresForThisStopPlace = Obj.departures
+                        .filter(isNotNullOrUndefined)
+                        .find(({ id }) => stop.id === id)
+
+                    if (
+                        !departuresForThisStopPlace ||
+                        !departuresForThisStopPlace.departures
+                    ) {
+                        return { ...stop, departures: [] }
+                    }
+
+                    const mappedAndFilteredDepartures = departuresForThisStopPlace.departures
+                        .map(transformDepartureToLineData)
+                        .filter(isNotNullOrUndefined)
+                        .filter(
+                            ({ route, type }) =>
+                                !hiddenRoutes?.[stopId]?.includes(route) &&
+                                !hiddenStopModes?.[stopId]?.includes(type),
+                        )
+                    return {
+                        ...stop,
+                        departures: mappedAndFilteredDepartures,
+                    }
+                },
+            )
+
+            return formattedStopPlacesWithDepartures.filter(
+                isNotNullOrUndefined,
+            )
+        },
+        [allStopPlaceIds, hiddenRoutes, hiddenStopModes],
     )
 
-    function formatStopPlacesWithDepartures(Obj: {
-        sortedStops: StopPlaceDetails[]
-        departures: Array<DeparturesById | undefined>
-    }): StopPlaceWithDepartures[] {
-        const formattedStopPlacesWithDepartures = allStopPlaceIds.map(
-            (stopId) => {
-                const stop = Obj.sortedStops.find(
-                    ({ id }) => id === stopId.replace(/-\d+$/, ''),
-                )
-
-                if (!stop) return
-
-                const departuresForThisStopPlace = Obj.departures
-                    .filter(isNotNullOrUndefined)
-                    .find(({ id }) => stop.id === id)
-
-                if (
-                    !departuresForThisStopPlace ||
-                    !departuresForThisStopPlace.departures
-                ) {
-                    return { ...stop, departures: [] }
-                }
-
-                const mappedAndFilteredDepartures = departuresForThisStopPlace.departures
-                    .map(transformDepartureToLineData)
-                    .filter(isNotNullOrUndefined)
-                    .filter(
-                        ({ route, type }) =>
-                            !hiddenRoutes?.[stopId]?.includes(route) &&
-                            !hiddenStopModes?.[stopId]?.includes(type),
-                    )
-                return {
-                    ...stop,
-                    departures: mappedAndFilteredDepartures,
-                }
-            },
-        )
-
-        return formattedStopPlacesWithDepartures.filter(isNotNullOrUndefined)
-    }
-
     useEffect(() => {
+        const isStopPlacesEqual = isEqual(
+            allStopPlaceIdsWithoutDuplicateNumber,
+            prevStopPlaceIdsWithoutDuplicateNumber,
+        )
         if (isDisabled) {
             return setStopPlacesWithDepartures(null)
         }
-        if (isChanged) {
+        if (!isStopPlacesEqual) {
             fetchStopPlaceDepartures(allStopPlaceIds)
                 .then(formatStopPlacesWithDepartures)
                 .then(setStopPlacesWithDepartures)
@@ -145,8 +147,13 @@ export default function useStopPlacesWithDepartures():
         }, REFRESH_INTERVAL)
 
         return (): void => clearInterval(intervalId)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isDisabled, isChanged])
+    }, [
+        allStopPlaceIds,
+        allStopPlaceIdsWithoutDuplicateNumber,
+        formatStopPlacesWithDepartures,
+        isDisabled,
+        prevStopPlaceIdsWithoutDuplicateNumber,
+    ])
 
     return stopPlacesWithDepartures
 }

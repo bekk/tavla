@@ -9,19 +9,24 @@ export default function useNearestPlaces(
 ): NearestPlace[] {
     const [nearestPlaces, setNearestPlaces] = useState<NearestPlace[]>([])
 
+    const { latitude, longitude } = position ?? {}
+
     useEffect(() => {
-        if (!position || !distance) return
+        if (!latitude || !longitude || !distance) return
         let ignoreResponse = false
 
         service
-            .getNearestPlaces(position, {
-                maximumDistance: distance,
-                filterByPlaceTypes: [
-                    TypeName.STOP_PLACE,
-                    TypeName.BIKE_RENTAL_STATION,
-                ],
-                multiModalMode: 'parent',
-            })
+            .getNearestPlaces(
+                { latitude, longitude },
+                {
+                    maximumDistance: distance,
+                    filterByPlaceTypes: [
+                        TypeName.STOP_PLACE,
+                        TypeName.BIKE_RENTAL_STATION,
+                    ],
+                    multiModalMode: 'parent',
+                },
+            )
             .then((places) => {
                 if (ignoreResponse) return
                 setNearestPlaces(places)
@@ -30,8 +35,7 @@ export default function useNearestPlaces(
         return (): void => {
             ignoreResponse = true
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [distance, position?.latitude, position?.longitude])
+    }, [distance, latitude, longitude])
 
     return nearestPlaces
 }
