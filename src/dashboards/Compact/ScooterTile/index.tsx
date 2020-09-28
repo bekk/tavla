@@ -37,12 +37,6 @@ function ScooterTile({ scooters }: Props): JSX.Element {
                 mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
                 mapStyle={process.env.MAPBOX_STYLE}
             >
-                <Marker
-                    latitude={viewport.latitude || 0}
-                    longitude={viewport.longitude || 0}
-                >
-                    <PositionPin size="24px" />
-                </Marker>
                 {scooters.map((sctr) => (
                     <Marker
                         key={sctr.id}
@@ -52,6 +46,12 @@ function ScooterTile({ scooters }: Props): JSX.Element {
                         <ScooterOperatorLogo logo={sctr.operator} size="24px" />
                     </Marker>
                 ))}
+                <Marker
+                    latitude={viewport.latitude || 0}
+                    longitude={viewport.longitude || 0}
+                >
+                    <PositionPin size="24px" />
+                </Marker>
             </ReactMapGL>
         </div>
     )

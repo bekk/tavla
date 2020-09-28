@@ -105,6 +105,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             <DepartureTile
                                 key={index}
                                 stopPlaceWithDepartures={stop}
+                                numberOfCols={cols.lg}
                             />
                         </div>
                     ))}
@@ -120,6 +121,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                     )}
                     {scooters?.length ? (
                         <div
+                            id="scooter"
                             key="sparkesykkel"
                             data-grid={getDataGrid(
                                 numberOfStopPlaces + scooterCol,

@@ -37,15 +37,30 @@ function getTransportHeaderIcons(departures: LineData[]): JSX.Element[] {
         .filter(isNotNullOrUndefined)
 }
 
-const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
+const DepartureTile = ({
+    stopPlaceWithDepartures,
+    numberOfCols,
+}: Props): JSX.Element => {
     const { departures, name } = stopPlaceWithDepartures
     const groupedDepartures = groupBy<LineData>(departures, 'route')
     const headerIcons = getTransportHeaderIcons(departures)
     const routes = Object.keys(groupedDepartures)
+    const cols = numberOfCols
     const [settings] = useSettingsContext()
     const [iconColorType, setIconColorType] = useState<IconColorType>(
         IconColorType.CONTRAST,
     )
+
+    const calculateNumbOfDepatures = (
+        numberOfDepartures: LineData[],
+    ): LineData[] => {
+        if (cols === 4) {
+            return numberOfDepartures.slice(0, 4)
+        } else if (cols >= 5) {
+            return numberOfDepartures.slice(0, 3)
+        }
+        return numberOfDepartures
+    }
 
     useEffect(() => {
         if (settings) {
@@ -57,7 +72,9 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
         <Tile title={name} icons={headerIcons}>
             {routes.map((route) => {
                 const subType = groupedDepartures[route][0].subType
-                const routeData = groupedDepartures[route].slice(0, 3)
+                const routeData = calculateNumbOfDepatures(
+                    groupedDepartures[route],
+                )
                 const routeType = routeData[0].type
                 const icon = getIcon(routeType, iconColorType, subType)
 
@@ -76,6 +93,7 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
 
 interface Props {
     stopPlaceWithDepartures: StopPlaceWithDepartures
+    numberOfCols: number
 }
 
 export default DepartureTile
