@@ -1,14 +1,13 @@
 import { useState, useEffect, useMemo } from 'react'
 import { isEqual } from 'lodash'
 import { BikeRentalStation } from '@entur/sdk'
-import { usePrevious } from '../utils'
+import { usePrevious, isNotNullOrUndefined } from '../utils'
 
 import service from '../service'
 import { useSettingsContext } from '../settings'
 import { REFRESH_INTERVAL } from '../constants'
 
 import useNearestPlaces from './useNearestPlaces'
-import { isNotNullOrUndefined } from '../utils'
 
 async function fetchBikeRentalStations(
     allStationIds: string[],
