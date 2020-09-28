@@ -82,19 +82,19 @@ export default function useStopPlacesWithDepartures():
     )
 
     const formatStopPlacesWithDepartures = useCallback(
-        (Obj: {
+        (stopsAndDepartures: {
             sortedStops: StopPlaceDetails[]
             departures: Array<DeparturesById | undefined>
         }): StopPlaceWithDepartures[] => {
             const formattedStopPlacesWithDepartures = allStopPlaceIds.map(
                 (stopId) => {
-                    const stop = Obj.sortedStops.find(
+                    const stop = stopsAndDepartures.sortedStops.find(
                         ({ id }) => id === stopId.replace(/-\d+$/, ''),
                     )
 
                     if (!stop) return
 
-                    const departuresForThisStopPlace = Obj.departures
+                    const departuresForThisStopPlace = stopsAndDepartures.departures
                         .filter(isNotNullOrUndefined)
                         .find(({ id }) => stop.id === id)
 
