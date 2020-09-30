@@ -36,12 +36,13 @@ const Tile = (props: Props): JSX.Element => {
                         <div className="departure-row__direction">
                             {departure.route.split(/([\s])/g).slice(1)}
                         </div>
-                        <div className="departure-row__time">
+                        <div className="departure-row__departure">
                             {departure.expectedDepartureTime.substr(11, 5)}
                         </div>
                     </div>
                 ))}
             </div>
+            <div className="divider"></div>
         </div>
     )
 }

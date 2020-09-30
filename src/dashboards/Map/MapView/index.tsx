@@ -68,22 +68,6 @@ const MapView = ({
                         ></BicycleCapacity>
                     </Marker>
                 ))}
-                {stopPlacesWithDepartures?.map((stopPlace) => (
-                    <Marker
-                        key={stopPlace.id}
-                        latitude={stopPlace.latitude ?? 0}
-                        longitude={stopPlace.longitude ?? 0}
-                        offsetLeft={-0}
-                        offsetTop={-10}
-                    >
-                        <Tooltip
-                            placement={data > 1 ? 'top' : 'right'}
-                            stopPlace={stopPlace}
-                        >
-                            <div className="tooltip-content"></div>
-                        </Tooltip>
-                    </Marker>
-                ))}
             </ReactMapGL>
             <div className="departure-display">
                 {stopPlacesWithDepartures?.map((sp) =>

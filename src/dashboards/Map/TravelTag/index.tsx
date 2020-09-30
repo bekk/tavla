@@ -3,9 +3,16 @@ import './styles.scss'
 
 const TravelTag = ({ icon, color, departure }: Props): JSX.Element => {
     return (
-        <div className="icon-box" style={{ backgroundColor: color }}>
+        <div
+            className="icon-box"
+            style={
+                departure.length < 3
+                    ? { backgroundColor: color, minWidth: '3.5rem' }
+                    : { backgroundColor: color }
+            }
+        >
             <div className="icon-box__icon">{icon}</div>
-            <div>{departure}</div>
+            <div className="icon-box__departure">{departure}</div>
         </div>
     )
 }
