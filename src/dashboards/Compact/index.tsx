@@ -7,7 +7,7 @@ import {
     useScooters,
 } from '../../logic'
 import DashboardWrapper from '../../containers/DashboardWrapper'
-import ResizeHandle from '../../assets/icons/resizeHandle'
+import ResizeHandle from '../../assets/icons/ResizeHandle'
 
 import DepartureTile from './DepartureTile'
 import BikeTile from './BikeTile'
@@ -109,10 +109,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             key={index.toString()}
                             data-grid={getDataGrid(index, maxWidthCols)}
                         >
-                            <ResizeHandle
-                                size="32px"
-                                className="resizeHandle"
-                            />
+                            <ResizeHandle size="32" className="resizeHandle" />
                             <DepartureTile
                                 key={index}
                                 stopPlaceWithDepartures={stop}
@@ -128,10 +125,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                                 maxWidthCols,
                             )}
                         >
-                            <ResizeHandle
-                                size="32px"
-                                className="resizeHandle"
-                            />
+                            <ResizeHandle size="32" className="resizeHandle" />
                             <BikeTile stations={bikeRentalStations} />
                         </div>
                     ) : (
@@ -146,10 +140,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                                 maxWidthCols,
                             )}
                         >
-                            <ResizeHandle
-                                size="32px"
-                                className="resizeHandle"
-                            />
+                            <ResizeHandle size="32" className="resizeHandle" />
                             <ScooterTile scooters={scooters} />
                         </div>
                     ) : (
