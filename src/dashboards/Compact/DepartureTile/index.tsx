@@ -19,6 +19,8 @@ import {
 import Tile from '../components/Tile'
 import TileRow from '../components/TileRow'
 
+import ResizeHandle from '../../../assets/icons/resizeHandle'
+
 import './styles.scss'
 import { useSettingsContext } from '../../../settings'
 
