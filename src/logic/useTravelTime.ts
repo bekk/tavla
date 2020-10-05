@@ -1,9 +1,8 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { isEqual } from 'lodash'
 import service from '../service'
 import { TripPattern, Coordinates } from '@entur/sdk'
 import { useSettingsContext } from '../settings'
-import useStopPlacesWithDepartures from './useStopPlacesWithDepartures'
 import { StopPlaceWithDepartures } from '../types'
 import { usePrevious } from '../utils'
 
@@ -23,10 +22,6 @@ async function fetchTravelTime(
                         to: {
                             name: stopPlace.name,
                             place: stopPlace.id,
-                            coordinates: {
-                                latitude: stopPlace.latitude ?? 0,
-                                longitude: stopPlace.longitude ?? 0,
-                            },
                         },
                         modes: ['foot'],
                     },
@@ -37,7 +32,9 @@ async function fetchTravelTime(
     return travelTimes
 }
 
-export default function useTravelTime(): TripPattern[][] | null {
+export default function useTravelTime(
+    stopPlaces: StopPlaceWithDepartures[] | null,
+): TripPattern[][] | null {
     const [settings] = useSettingsContext()
     const [travelTime, setTravelTime] = useState<TripPattern[][] | null>(null)
 
@@ -49,26 +46,19 @@ export default function useTravelTime(): TripPattern[][] | null {
         longitude: 0,
     }
 
-    const stopPlacesWithDepartures = useStopPlacesWithDepartures()
-    const names = stopPlacesWithDepartures?.map((stopPlace) => stopPlace.name)
-    const previousNames = usePrevious(names)
+    const ids = stopPlaces?.map((stopPlace) => stopPlace.id)
+    const previousIds = usePrevious(ids)
     useEffect(() => {
-        if (stopPlacesWithDepartures === null) {
+        if (stopPlaces === null) {
             return setTravelTime(null)
         }
-        if (!isEqual(names, previousNames)) {
-            fetchTravelTime(stopPlacesWithDepartures, {
+        if (!isEqual(ids, previousIds)) {
+            fetchTravelTime(stopPlaces, {
                 latitude: fromLatitude,
                 longitude: fromLongitude,
             }).then(setTravelTime)
         }
-    }, [
-        fromLatitude,
-        fromLongitude,
-        names,
-        previousNames,
-        stopPlacesWithDepartures,
-    ])
+    }, [fromLatitude, fromLongitude, ids, previousIds, stopPlaces])
 
     return travelTime
 }
