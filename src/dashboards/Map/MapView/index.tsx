@@ -84,7 +84,7 @@ const MapView = ({
                     latitude={viewport.latitude ?? 0}
                     longitude={viewport.longitude ?? 0}
                 >
-                    <PositionPin size="24px" />
+                    <PositionPin size={24} />
                 </Marker>
             </ReactMapGL>
             <div className="departure-display">
