@@ -1,7 +1,7 @@
 import React from 'react'
 import './styles.scss'
 
-const TravelTag = ({ icon, color, departure }: Props): JSX.Element => {
+const DepartureIcon = ({ icon, color, departure }: Props): JSX.Element => {
     return (
         <div
             className="icon-box"
@@ -23,4 +23,4 @@ interface Props {
     departure: string
 }
 
-export default TravelTag
+export default DepartureIcon

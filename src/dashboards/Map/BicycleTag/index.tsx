@@ -7,23 +7,23 @@ import './styles.scss'
 const BicycleTag = ({ bikes, spaces }: Props): JSX.Element => {
     return (
         <div className="bicycle-tag">
-            <div className="bicycle-tag__bikes">
-                <div className="bicycle-tag__bikes__icon">
+            <div className="bicycle-tag__row">
+                <div className="bicycle-tag__row__icon">
                     <BicycleIcon
                         key="bike-tile-icon"
                         color={colors.brand.white}
                     />
                 </div>
-                <div>{bikes}</div>
+                <div className="bicycle-tag__row__amount">{bikes}</div>
             </div>
-            <div className="bicycle-tag__spaces">
-                <div className="bicycle-tag__bikes__icon">
+            <div className="bicycle-tag__row">
+                <div className="bicycle-tag__row__icon">
                     <ParkIcon
                         key="space-tile-icon"
                         color={colors.brand.white}
                     />
                 </div>
-                <div>{spaces}</div>
+                <div className="bicycle-tag__row__amount">{spaces}</div>
             </div>
         </div>
     )

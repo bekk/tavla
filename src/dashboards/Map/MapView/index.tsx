@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
 
 import ReactMapGL, { Marker } from 'react-map-gl'
-import { StopPlaceWithDepartures, LineData } from '../../../types'
+import { StopPlaceWithDepartures } from '../../../types'
 import { BikeRentalStation } from '@entur/sdk'
 import PositionPin from '../../../assets/icons/positionPin'
-import BicycleCapacity from '../../../assets/icons/bicycleCapacity'
 
-import Tooltip from '../Tooltip'
 import { DEFAULT_ZOOM } from '../../../constants'
 import { useSettingsContext } from '../../../settings'
-import Tile from '../components/Tile'
 
 import './styles.scss'
+import BicycleTag from '../BicycleTag'
+import DepartureTag from '../DepartureTag'
+import StopPlaceTag from '../StopPlaceTag'
+import { useTravelTime } from '../../../logic'
 
 const MapView = ({
     bikeRentalStations,
@@ -27,9 +28,8 @@ const MapView = ({
         maxZoom: 16,
         minZoom: 13.5,
     })
-
-    const data = 2
-
+    const travelTimes = useTravelTime()
+    console.log(travelTimes)
     return (
         <div>
             <ReactMapGL
@@ -50,12 +50,24 @@ const MapView = ({
                     })
                 }}
             >
-                <Marker
-                    latitude={viewport.latitude || 0}
-                    longitude={viewport.longitude || 0}
-                >
-                    <PositionPin size="24px" />
-                </Marker>
+                {stopPlacesWithDepartures?.map((stopPlace) =>
+                    stopPlace.departures.length > 0 ? (
+                        <Marker
+                            key={stopPlace.id}
+                            latitude={stopPlace.latitude ?? 0}
+                            longitude={stopPlace.longitude ?? 0}
+                            offsetLeft={-50}
+                            offsetTop={-10}
+                        >
+                            <StopPlaceTag
+                                stopPlace={stopPlace}
+                                travelTimes={travelTimes}
+                            />
+                        </Marker>
+                    ) : (
+                        []
+                    ),
+                )}
                 {bikeRentalStations?.map((station) => (
                     <Marker
                         key={station.id}
@@ -63,16 +75,23 @@ const MapView = ({
                         longitude={station.longitude}
                         marker-size="large"
                     >
-                        <BicycleCapacity
-                            capacity={station.bikesAvailable ?? 0}
-                        ></BicycleCapacity>
+                        <BicycleTag
+                            bikes={station.bikesAvailable ?? 0}
+                            spaces={station.spacesAvailable ?? 0}
+                        ></BicycleTag>
                     </Marker>
                 ))}
+                <Marker
+                    latitude={viewport.latitude ?? 0}
+                    longitude={viewport.longitude ?? 0}
+                >
+                    <PositionPin size="24px" />
+                </Marker>
             </ReactMapGL>
             <div className="departure-display">
                 {stopPlacesWithDepartures?.map((sp) =>
                     sp.departures.length ? (
-                        <Tile key={sp.id} stopPlace={sp}></Tile>
+                        <DepartureTag key={sp.id} stopPlace={sp}></DepartureTag>
                     ) : (
                         []
                     ),

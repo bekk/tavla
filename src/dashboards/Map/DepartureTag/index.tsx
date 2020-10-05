@@ -1,13 +1,13 @@
 import React from 'react'
-import { StopPlaceWithDepartures, IconColorType } from '../../../../types'
+import { StopPlaceWithDepartures, IconColorType } from '../../../types'
 
 import './styles.scss'
-import { getIcon, getIconColor } from '../../../../utils'
-import TravelTag from '../../TravelTag'
+import { getIcon, getIconColor } from '../../../utils'
+import DepartureIcon from './DepartureIcon'
 import { colors } from '@entur/tokens'
 import { Heading4 } from '@entur/typography'
 
-const Tile = (props: Props): JSX.Element => {
+const DepartureTag = (props: Props): JSX.Element => {
     return (
         <div className="departure-tile">
             <Heading4
@@ -19,7 +19,7 @@ const Tile = (props: Props): JSX.Element => {
             <div>
                 {props.stopPlace.departures.slice(0, 2).map((departure) => (
                     <div className="departure-row" key={departure.id}>
-                        <TravelTag
+                        <DepartureIcon
                             icon={getIcon(
                                 departure.type,
                                 undefined,
@@ -50,4 +50,4 @@ const Tile = (props: Props): JSX.Element => {
 interface Props {
     stopPlace: StopPlaceWithDepartures
 }
-export default Tile
+export default DepartureTag

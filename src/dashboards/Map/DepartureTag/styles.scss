@@ -1,5 +1,5 @@
-@import '../../../../assets/styles/import.scss';
-@import '../../../../variables.scss';
+@import '../../../assets/styles/import.scss';
+@import '../../../variables.scss';
 
 .departure-tile {
     position: relative;
@@ -13,6 +13,7 @@
     box-shadow: 0 20px 25px -10px rgba(0, 0, 0, 0.1);
     &__stop{
         margin: 1rem 1.5rem 0.5rem 1.5rem;
+        font-size: 1.25rem;
     }
 }
 
