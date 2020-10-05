@@ -34,7 +34,6 @@ async function fetchTravelTime(
                 ),
         ),
     )
-    console.log('traveltime fetch is called')
     return travelTimes
 }
 
