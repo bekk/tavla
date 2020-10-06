@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react'
 import { isEqual } from 'lodash'
 import service from '../service'
-import { TripPattern, Coordinates } from '@entur/sdk'
+import { Coordinates } from '@entur/sdk'
 import { useSettingsContext } from '../settings'
 import { StopPlaceWithDepartures } from '../types'
 import { usePrevious } from '../utils'
 
-async function fetchTravelTime(
+async function getWalkTime(
     stopPlaces: StopPlaceWithDepartures[],
     from: Coordinates,
-): Promise<TripPattern[][]> {
+): Promise<Array<{ stopId: string; walkTime: number }>> {
     const travelTimes = Promise.all(
         stopPlaces.map(
             async (stopPlace) =>
-                await service.getTripPatterns(
-                    {
+                await service
+                    .getTripPatterns({
                         from: {
                             name: 'pin',
                             coordinates: from,
@@ -24,9 +24,12 @@ async function fetchTravelTime(
                             place: stopPlace.id,
                         },
                         modes: ['foot'],
-                    },
-                    undefined,
-                ),
+                        limit: 1,
+                    })
+                    .then((result) => ({
+                        stopId: stopPlace.id,
+                        walkTime: result[0].duration,
+                    })),
         ),
     )
     return travelTimes
@@ -34,9 +37,12 @@ async function fetchTravelTime(
 
 export default function useTravelTime(
     stopPlaces: StopPlaceWithDepartures[] | null,
-): TripPattern[][] | null {
+): Array<{ stopId: string; walkTime: number }> | null {
     const [settings] = useSettingsContext()
-    const [travelTime, setTravelTime] = useState<TripPattern[][] | null>(null)
+    const [travelTime, setTravelTime] = useState<Array<{
+        stopId: string
+        walkTime: number
+    }> | null>(null)
 
     const {
         latitude: fromLatitude,
@@ -53,7 +59,7 @@ export default function useTravelTime(
             return setTravelTime(null)
         }
         if (!isEqual(ids, previousIds)) {
-            fetchTravelTime(stopPlaces, {
+            getWalkTime(stopPlaces, {
                 latitude: fromLatitude,
                 longitude: fromLongitude,
             }).then(setTravelTime)
