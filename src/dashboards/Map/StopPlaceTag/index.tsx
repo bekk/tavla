@@ -4,7 +4,6 @@ import { getIcon, getIconColor } from '../../../utils'
 
 import './styles.scss'
 import { IconColorType, StopPlaceWithDepartures } from '../../../types'
-import { TripPattern } from '@entur/sdk'
 
 const StopPlaceTag = ({ stopPlace, travelTimes }: Props): JSX.Element => {
     const uniqueTypes = [
@@ -17,13 +16,10 @@ const StopPlaceTag = ({ stopPlace, travelTimes }: Props): JSX.Element => {
     }))
 
     const travelTimeForStopPlace =
-        travelTimes?.filter(
-            (tripPattern) =>
-                (tripPattern[0].legs[0]
-                    ? tripPattern[0].legs[0].toPlace?.name
-                    : '') === stopPlace.name,
-        ) ?? []
-
+        travelTimes?.find(
+            (walkTime) => (walkTime.stopId === stopPlace.id && walkTime.walkTime !== undefined)
+        )
+        
     return (
         <div className="stopplace-tag">
             <div className="stopplace-tag__icon-row">
@@ -39,9 +35,9 @@ const StopPlaceTag = ({ stopPlace, travelTimes }: Props): JSX.Element => {
             </div>
             <div className="stopplace-tag__stopplace">{stopPlace.name}</div>
             <div className="stopplace-tag__walking-distance">
-                {travelTimeForStopPlace[0]
+                {travelTimeForStopPlace
                     ? `${Math.ceil(
-                          (travelTimeForStopPlace[0][0].duration ?? 0) / 60,
+                          (travelTimeForStopPlace.walkTime) / 60,
                       )} min å gå`
                     : ''}
             </div>
@@ -51,7 +47,7 @@ const StopPlaceTag = ({ stopPlace, travelTimes }: Props): JSX.Element => {
 
 interface Props {
     stopPlace: StopPlaceWithDepartures
-    travelTimes: TripPattern[][] | null
+    travelTimes: { stopId: string; walkTime: number; }[] | null
 }
 
 export default StopPlaceTag
