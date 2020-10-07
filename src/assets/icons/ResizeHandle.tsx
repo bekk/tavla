@@ -2,15 +2,11 @@ import React from 'react'
 import '../../variables.scss'
 import { colors } from '@entur/tokens'
 
-function ResizeHandle({
-    className,
-    size,
-    handleType,
-}: Props): JSX.Element | null {
+function ResizeHandle({ className, size, variant }: Props): JSX.Element | null {
     const color =
-        handleType === 'scooter'
-            ? 'var(--tavla-background-color)'
-            : colors.blues.blue60
+        variant === 'light'
+            ? colors.blues.blue60
+            : 'var(--tavla-background-color)'
     return (
         <svg
             className={className}
@@ -66,7 +62,7 @@ function ResizeHandle({
 interface Props {
     className?: string
     size?: string
-    handleType?: string
+    variant?: 'light' | 'dark'
 }
 
 export default ResizeHandle

@@ -48,7 +48,6 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
 
     let stopPlacesWithDepartures = useStopPlacesWithDepartures()
 
-    // Remove stop places without departures
     if (stopPlacesWithDepartures) {
         stopPlacesWithDepartures = stopPlacesWithDepartures.filter(
             ({ departures }) => departures.length > 0,
@@ -112,7 +111,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             <ResizeHandle
                                 size="32"
                                 className="resizeHandle"
-                                handleType="departure"
+                                variant="light"
                             />
                             <DepartureTile
                                 key={index}
@@ -132,7 +131,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             <ResizeHandle
                                 size="32"
                                 className="resizeHandle"
-                                handleType="bike"
+                                variant="light"
                             />
                             <BikeTile stations={bikeRentalStations} />
                         </div>
@@ -151,7 +150,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             <ResizeHandle
                                 size="32"
                                 className="resizeHandle"
-                                handleType="scooter"
+                                variant="dark"
                             />
                             <ScooterTile scooters={scooters} />
                         </div>
