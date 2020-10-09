@@ -7,9 +7,10 @@ import './styles.scss'
 import { Label } from '@entur/typography'
 import { DEFAULT_ZOOM } from '../../../../constants'
 import { useSettingsContext } from '../../../../settings'
-import { Scooter } from '@entur/sdk'
+import { Scooter, BikeRentalStation } from '@entur/sdk'
 import ScooterOperatorLogo from '../../../../assets/icons/scooterOperatorLogo'
 import PositionPin from '../../../../assets/icons/positionPin'
+import BicycleTag from '../../../../dashboards/Map/BicycleTag'
 
 function ZoomEditor(props: Props): JSX.Element {
     const [settings, { setZoom }] = useSettingsContext()
@@ -67,6 +68,18 @@ function ZoomEditor(props: Props): JSX.Element {
                           </Marker>
                       ))
                     : []}
+                {props.bikeRentalStations?.map((station) => (
+                    <Marker
+                        key={station.id}
+                        latitude={station.latitude}
+                        longitude={station.longitude}
+                    >
+                        <BicycleTag
+                            bikes={station.bikesAvailable ?? 0}
+                            spaces={station.spacesAvailable ?? 0}
+                        />
+                    </Marker>
+                ))}
                 <Marker
                     latitude={viewport.latitude || 0}
                     longitude={viewport.longitude || 0}
@@ -82,6 +95,7 @@ interface Props {
     zoom: number
     onZoomUpdated: (newZoom: number) => void
     scooters: Scooter[] | null
+    bikeRentalStations: BikeRentalStation[] | null
 }
 
 export default memo<Props>(ZoomEditor)

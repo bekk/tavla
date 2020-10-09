@@ -187,6 +187,7 @@ const EditTab = (): JSX.Element => {
                         zoom={zoom}
                         onZoomUpdated={setZoom}
                         scooters={scooters}
+                        bikeRentalStations={stations}
                     />
                 </GridItem>
             </GridContainer>

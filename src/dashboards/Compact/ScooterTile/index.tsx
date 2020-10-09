@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ReactMapGL, { Marker } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
-import { Scooter } from '@entur/sdk'
+import { Scooter, BikeRentalStation } from '@entur/sdk'
 import { colors } from '@entur/tokens'
 import { ScooterIcon } from '@entur/icons'
 import { useSettingsContext } from '../../../settings'
@@ -13,8 +13,9 @@ import PositionPin from '../../../assets/icons/positionPin'
 
 import './styles.scss'
 import { DEFAULT_ZOOM } from '../../../constants'
+import BicycleTag from '../../Map/BicycleTag'
 
-function ScooterTile({ scooters }: Props): JSX.Element {
+function ScooterTile({ scooters, bikeRentalStations }: Props): JSX.Element {
     const [settings] = useSettingsContext()
     const [viewport] = useState({
         latitude: settings?.coordinates?.latitude,
@@ -46,6 +47,18 @@ function ScooterTile({ scooters }: Props): JSX.Element {
                         <ScooterOperatorLogo logo={sctr.operator} size="24px" />
                     </Marker>
                 ))}
+                {bikeRentalStations?.map((station) => (
+                    <Marker
+                        key={station.id}
+                        latitude={station.latitude}
+                        longitude={station.longitude}
+                    >
+                        <BicycleTag
+                            bikes={station.bikesAvailable ?? 0}
+                            spaces={station.spacesAvailable ?? 0}
+                        />
+                    </Marker>
+                ))}
                 <Marker
                     latitude={viewport.latitude || 0}
                     longitude={viewport.longitude || 0}
@@ -59,6 +72,7 @@ function ScooterTile({ scooters }: Props): JSX.Element {
 
 interface Props {
     scooters: Scooter[]
+    bikeRentalStations: BikeRentalStation[] | null
 }
 
 export default ScooterTile

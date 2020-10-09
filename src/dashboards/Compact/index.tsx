@@ -141,7 +141,10 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             )}
                         >
                             <ResizeHandle size="32" className="resizeHandle" />
-                            <ScooterTile scooters={scooters} />
+                            <ScooterTile
+                                scooters={scooters}
+                                bikeRentalStations={bikeRentalStations}
+                            />
                         </div>
                     ) : (
                         []
