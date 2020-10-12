@@ -108,7 +108,11 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             key={index.toString()}
                             data-grid={getDataGrid(index, maxWidthCols)}
                         >
-                            <ResizeHandle size="32" className="resizeHandle" />
+                            <ResizeHandle
+                                size="32"
+                                className="resizeHandle"
+                                variant="light"
+                            />
                             <DepartureTile
                                 key={index}
                                 stopPlaceWithDepartures={stop}
@@ -123,7 +127,11 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                                 maxWidthCols,
                             )}
                         >
-                            <ResizeHandle size="32" className="resizeHandle" />
+                            <ResizeHandle
+                                size="32"
+                                className="resizeHandle"
+                                variant="light"
+                            />
                             <BikeTile stations={bikeRentalStations} />
                         </div>
                     ) : (
@@ -138,7 +146,11 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                                 maxWidthCols,
                             )}
                         >
-                            <ResizeHandle size="32" className="resizeHandle" />
+                            <ResizeHandle
+                                size="32"
+                                className="resizeHandle"
+                                variant="dark"
+                            />
                             <ScooterTile scooters={scooters} />
                         </div>
                     ) : (
