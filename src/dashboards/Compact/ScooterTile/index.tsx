@@ -1,56 +1,27 @@
-import React, { useState } from 'react'
-import ReactMapGL, { Marker } from 'react-map-gl'
+import React from 'react'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
-import { Scooter } from '@entur/sdk'
+import { BikeRentalStation, Scooter } from '@entur/sdk'
 
-import { useSettingsContext } from '../../../settings'
-import { DEFAULT_ZOOM } from '../../../constants'
-
-import ScooterOperatorLogo from '../../../assets/icons/scooterOperatorLogo'
-import PositionPin from '../../../assets/icons/positionPin'
+import TestMap from '../../../components/Map'
 
 import './styles.scss'
 
-function ScooterTile({ scooters }: Props): JSX.Element {
-    const [settings] = useSettingsContext()
-    const [viewport] = useState({
-        latitude: settings?.coordinates?.latitude,
-        longitude: settings?.coordinates?.longitude,
-        width: 'auto',
-        height: '100%',
-        zoom: settings?.zoom ?? DEFAULT_ZOOM,
-    })
+import { StopPlaceWithDepartures } from '../../../types'
 
+function ScooterTile(data: Props): JSX.Element {
     return (
         <div className="scootertile">
-            <ReactMapGL
-                {...viewport}
-                mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
-                mapStyle={process.env.MAPBOX_STYLE}
-            >
-                <Marker
-                    latitude={viewport.latitude || 0}
-                    longitude={viewport.longitude || 0}
-                >
-                    <PositionPin size={24} />
-                </Marker>
-                {scooters.map((sctr) => (
-                    <Marker
-                        key={sctr.id}
-                        latitude={sctr.lat}
-                        longitude={sctr.lon}
-                    >
-                        <ScooterOperatorLogo logo={sctr.operator} size={24} />
-                    </Marker>
-                ))}
-            </ReactMapGL>
+            <TestMap {...data} interactable={false}></TestMap>
         </div>
     )
 }
 
 interface Props {
+    stopPlaces: StopPlaceWithDepartures[] | null
+    bikeRentalStations: BikeRentalStation[] | null
     scooters: Scooter[]
+    walkTimes: Array<{ stopId: string; walkTime: number }> | null
 }
 
 export default ScooterTile
