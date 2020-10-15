@@ -63,7 +63,7 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
                 <Heading2>{stopPlaceWithDepartures.name}</Heading2>
                 <div className="tile__header__icons">{headerIcons}</div>
             </header>
-            <Table spacing="small">
+            <Table spacing="small" fixed>
                 <TableHead>
                     <TableRow>
                         <HeaderCell id="tile__header__linje">Linje</HeaderCell>
