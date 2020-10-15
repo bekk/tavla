@@ -13,7 +13,7 @@ function SubLabelIcon({
         return (
             <div className="tilerow__sublabel__cancellation">
                 <ValidationError />
-                    {subLabel.situation}
+                {subLabel.situation}
             </div>
         )
 

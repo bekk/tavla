@@ -2,16 +2,12 @@
 @import '../../../../variables.scss';
 @import '~@entur/table/dist/styles.css';
 
-.busStop .tilerow__sublabel{
-    
-
+.busStop .tilerow__sublabel {
     &__cancellation {
-    background-color: $colors-brand-white;
-    border-radius: 0.5rem;
-    height: 0.875rem;
-    overflow: visible;
-    width: 0.875rem;
-
+        background-color: $colors-brand-white;
+        border-radius: 0.5rem;
+        height: 0.875rem;
+        overflow: visible;
+        width: 0.875rem;
     }
-
 }

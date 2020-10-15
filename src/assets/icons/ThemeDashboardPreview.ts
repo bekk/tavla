@@ -9,7 +9,7 @@ import BusStopLight from '../../assets/previews/previewLight/Holdeplass-light.sv
 import CompactDefault from '../../assets/previews/previewDefault/Kompakt-blue.svg'
 import ChronoDefault from '../../assets/previews/previewDefault/Kronologisk-blue.svg'
 import TimelineDefault from '../../assets/previews/previewDefault/Tidslinje-blue.svg'
-import BusStopDefault from  '../../assets/previews/previewDefault/Holdeplass-blue.svg'
+import BusStopDefault from '../../assets/previews/previewDefault/Holdeplass-blue.svg'
 import CompactGrey from '../../assets/previews/previewGrey/Kompakt-grey.svg'
 import ChronoGrey from '../../assets/previews/previewGrey/Kronologisk-grey.svg'
 import TimelineGrey from '../../assets/previews/previewGrey/Tidslinje-grey.svg'
@@ -47,7 +47,7 @@ export function ThemeDashbboardPreview(
                 Timeline: TimelineDefault,
                 Chrono: ChronoDefault,
                 Compact: CompactDefault,
-                BusStop: BusStopDefault
+                BusStop: BusStopDefault,
             }
     }
 }
