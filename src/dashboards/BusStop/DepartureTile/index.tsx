@@ -64,15 +64,16 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
                 <div className="tile__header__icons">{headerIcons}</div>
             </header>
             <Table spacing="small" fixed>
+                <col style={{ width: '3%' }} />
+                <col style={{ width: '22%' }} />
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '70%' }} />
                 <TableHead>
                     <TableRow>
-                        <HeaderCell id="tile__header__linje">Linje</HeaderCell>
-                        <HeaderCell className="tile__header__avgang">
-                            Avgang
-                        </HeaderCell>
-                        <HeaderCell className="tile__header__avvik">
-                            Avvik
-                        </HeaderCell>
+                        <HeaderCell> </HeaderCell>
+                        <HeaderCell>Linje</HeaderCell>
+                        <HeaderCell>Avgang</HeaderCell>
+                        <HeaderCell>Avvik</HeaderCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -80,16 +81,17 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
                         <TableRow key={data.id}>
                             <DataCell>
                                 <Heading3>
-                                    <span>
+                                    <div>
                                         {getIcon(
                                             data.type,
                                             iconColorType,
                                             data.subType,
                                         )}
-                                        &nbsp;&nbsp;&nbsp;
-                                    </span>
-                                    {data.route}
+                                    </div>
                                 </Heading3>
+                            </DataCell>
+                            <DataCell>
+                                <Heading3>{data.route}</Heading3>
                             </DataCell>
                             <DataCell>{data.time}</DataCell>
                             <DataCell>

@@ -58,7 +58,7 @@ const DashboardPickerTab = (): JSX.Element => {
                 />
                 <RadioCard
                     title="Holdeplass"
-                    description="Avgagnene viser kronologisk rekkefølge. Egner seg godt for holdeplasser og stopp. "
+                    description="Her får avgangene full bredde med god plass til å vise avviksmeldinger. Egner seg godt for når man er interessert i ett eller få stopp."
                     cardValue="BusStop"
                     selected={radioValue === 'BusStop'}
                     preview={dashboardImages.BusStop}
