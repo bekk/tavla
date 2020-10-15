@@ -41,6 +41,7 @@
         "@entur/modal": "^1.1.28",
         "@entur/sdk": "^1.11.0",
         "@entur/tab": "^0.4.13",
+        "@entur/table": "^4.0.4",
         "@entur/tokens": "^1.4.0",
         "@entur/travel": "^4.0.12",
         "@entur/typography": "^1.2.3",

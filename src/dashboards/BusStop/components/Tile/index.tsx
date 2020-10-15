@@ -1,32 +1,32 @@
 import React from 'react'
-import { Heading2 } from '@entur/typography'
-
+import ValidationExclamation from '../../../../assets/icons/ValidationExclamation'
+import ValidationError from '../../../../assets/icons/ValidationError'
+import { TileSubLabel } from '../../../../types'
 import './styles.scss'
 
-function Tile({ title, icons, children }: Props): JSX.Element {
-    return (
-        <div className="tile">
-            <header className="tile__header">
-                <Heading2>{title}</Heading2>
-                <div className="tile__header-icons">{icons}</div>
-            </header>
-            <div className="column-titles">
-                <div>Linje </div>
-                <div>Avgang</div>
-                <div>Avvik</div>
+function SubLabelIcon({
+    subLabel,
+}: {
+    subLabel: TileSubLabel
+}): JSX.Element | null {
+    if (subLabel.hasCancellation)
+        return (
+            <div className="tilerow__sublabel__cancellation">
+                <ValidationError />
+                    {subLabel.situation}
             </div>
+        )
 
+    if (subLabel.hasSituation)
+        return (
+            <div className="tilerow__sublabel__situation">
+                <ValidationExclamation />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                {subLabel.situation}
+            </div>
+        )
 
-           
-            {children}
-        </div>
-    )
+    return null
 }
 
-interface Props {
-    title: string
-    icons: JSX.Element | JSX.Element[]
-    children: JSX.Element[]
-}
-
-export default Tile
+export default SubLabelIcon

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Theme } from '../../types'
 import { useThemeColor } from '../../utils'
+import { Blockquote } from '@entur/typography'
 
 function ValidationExclamation(): JSX.Element {
     const exclamationIconColor = useThemeColor(

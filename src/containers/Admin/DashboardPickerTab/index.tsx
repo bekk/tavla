@@ -57,11 +57,11 @@ const DashboardPickerTab = (): JSX.Element => {
                     className="display-wrapper__display-card"
                 />
                 <RadioCard
-                    title="Bussholdeplass"
-                    description="Avgangene vises for en holdeplass"
+                    title="Holdeplass"
+                    description="Avgagnene viser kronologisk rekkefølge. Egner seg godt for holdeplasser og stopp. "
                     cardValue="BusStop"
                     selected={radioValue === 'BusStop'}
-                    preview={dashboardImages.Timeline}
+                    preview={dashboardImages.BusStop}
                     callback={(val): void => updateChoice(val)}
                     className="display-wrapper__display-card"
                 />

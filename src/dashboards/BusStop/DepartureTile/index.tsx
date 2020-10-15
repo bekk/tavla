@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { colors } from '@entur/tokens'
+import { Heading2, Heading3} from '@entur/typography'
+import {Table, TableBody, TableRow, DataCell, TableHead, HeaderCell} from '@entur/table';
 
 import {
     getIcon,
@@ -15,9 +17,8 @@ import {
     IconColorType,
 } from '../../../types'
 
-import Tile from '../components/Tile'
-import TileRow from '../components/TileRow'
 
+import SubLabelIcon from '../components/Tile'
 import './styles.scss'
 import { useSettingsContext } from '../../../settings'
 
@@ -50,23 +51,46 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
         }
     }, [settings])
 
-    return (
-        <Tile title={name} icons={headerIcons}>
-            {departures.map((data) => {
-                const icon = getIcon(data.type, iconColorType, data.subType)
-                const subLabel = createTileSubLabel(data)
-
-                return (
-                    <TileRow
-                        key={data.id}
-                        label={data.route}
-                        subLabel={subLabel}
-                        icon={icon}
-                    />
-                )
-            })}
-        </Tile>
-    )
+            return ( 
+            
+            <div className="tile">
+                <header className="tile__header">
+                <Heading2>{stopPlaceWithDepartures.name}</Heading2>
+                <div className="tile__header__icons">{headerIcons}</div>
+                </header>
+                <Table spacing="small" fixed>
+                <TableHead>
+                    <TableRow>
+                        <HeaderCell id="tile__header__linje">Linje</HeaderCell>
+                        <HeaderCell className="tile__header__avgang">Avgang</HeaderCell>
+                        <HeaderCell className="tile__header__avvik">Avvik</HeaderCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                {departures.map((data) => (  
+                    <TableRow>
+                        <DataCell>
+                        <Heading3>
+                        <span>
+                        {getIcon(data.type, iconColorType, data.subType)}
+                        &nbsp;&nbsp;&nbsp;
+                        </span>
+                        {data.route} 
+                        </Heading3>
+                        </DataCell>
+                        <DataCell>
+                        {data.time}
+                        </DataCell>
+                        <DataCell>
+                        <SubLabelIcon subLabel={createTileSubLabel(data)}/>
+                        </DataCell>             
+                    </TableRow>
+                    ))}
+                </TableBody>
+                </Table>   
+            </div>
+            
+            )
 }
 
 interface Props {

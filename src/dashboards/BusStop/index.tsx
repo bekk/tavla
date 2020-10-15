@@ -2,12 +2,12 @@ import React from 'react'
 
 import DashboardWrapper from '../../containers/DashboardWrapper'
 import { useStopPlacesWithDepartures } from '../../logic'
-import DepartureTile from './DepartureTile' 
+import DepartureTile from './DepartureTile'
 
 import './styles.scss'
 function getDataGrid(index: number): { [key: string]: number } {
     return {
-        w: 4,
+        w: 1,
         maxW: 4,
         minH: 1,
         h: 4,
@@ -26,28 +26,28 @@ function BusStop({ history }: Props): JSX.Element {
             stopPlacesWithDepartures={stopPlacesWithDepartures}
         >
             <div className="busStop__tiles">
-            { (stopPlacesWithDepartures || []).map(stopPlace => {
-               return (
-                (stopPlacesWithDepartures || []).map((stop, index) => (
-                    <div
-                        key={index.toString()}
-                        data-grid={getDataGrid(index)}
-                    >
-                        <DepartureTile
-                            key={index}
-                            stopPlaceWithDepartures={stop}
-                        />
-                    </div>
-                ))
-               )
-           }) }
-           </div>
+                {(stopPlacesWithDepartures || []).map((stopPlace) => {
+                    return (stopPlacesWithDepartures || []).map(
+                        (stop, index) => (
+                            <div
+                                key={index.toString()}
+                                data-grid={getDataGrid(index)}
+                            >
+                                <DepartureTile
+                                    key={index}
+                                    stopPlaceWithDepartures={stop}
+                                />
+                            </div>
+                        ),
+                    )
+                })}
+            </div>
         </DashboardWrapper>
     )
 }
 
 interface Props {
-    history: any,
+    history: any
 }
 
 export default BusStop
