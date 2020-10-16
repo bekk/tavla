@@ -7,13 +7,13 @@
     .entur-leg-line--direction-horizontal {
         min-width: unset;
     }
-    
+  
     &__stop {
         background-color: var(--tavla-box-background-color);
         width: 100%;
         margin-bottom: 1rem;
         padding: 2rem;
-        overflow-y: hidden;
+        overflow: hidden;
     }
 
     &__heading {

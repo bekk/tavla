@@ -53,12 +53,6 @@ function ZoomEditor(props: Props): JSX.Element {
                 mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
                 mapStyle={process.env.MAPBOX_STYLE}
             >
-                <Marker
-                    latitude={viewport.latitude || 0}
-                    longitude={viewport.longitude || 0}
-                >
-                    <PositionPin size="24px" />
-                </Marker>
                 {props.scooters
                     ? props.scooters.map((sctr) => (
                           <Marker
@@ -73,6 +67,12 @@ function ZoomEditor(props: Props): JSX.Element {
                           </Marker>
                       ))
                     : []}
+                <Marker
+                    latitude={viewport.latitude || 0}
+                    longitude={viewport.longitude || 0}
+                >
+                    <PositionPin size="24px" />
+                </Marker>
             </ReactMapGL>
         </div>
     )
