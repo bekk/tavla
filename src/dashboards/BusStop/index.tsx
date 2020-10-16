@@ -17,9 +17,10 @@ function BusStop({ history }: Props): JSX.Element {
         >
             <div className="busStop__tiles">
                 {(stopPlacesWithDepartures || []).map((stop, index) => (
-                    <div key={index.toString()}>
-                        <DepartureTile stopPlaceWithDepartures={stop} />
-                    </div>
+                    <DepartureTile
+                        key={index.toString()}
+                        stopPlaceWithDepartures={stop}
+                    />
                 ))}
             </div>
         </DashboardWrapper>

@@ -24,7 +24,7 @@ import {
     IconColorType,
 } from '../../../types'
 
-import SubLabelIcon from '../components/SubLabelcon'
+import SubLabelIcon from '../components/SubLabelIcon'
 import './styles.scss'
 import { useSettingsContext } from '../../../settings'
 
