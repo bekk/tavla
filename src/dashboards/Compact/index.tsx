@@ -140,7 +140,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                     )}
                     {scooters?.length ? (
                         <div
-                            id="compact-scooter-tile"
+                            id="compact-map-tile"
                             key="sparkesykkel"
                             data-grid={getDataGrid(
                                 numberOfStopPlaces + scooterCol,

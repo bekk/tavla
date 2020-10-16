@@ -5,8 +5,9 @@
     height: 100%;
     width: 25rem;
     background-color: var(--tavla-box-background-color);
-    display: flex;
-    flex-direction: column;
+    flex: none;
+    overflow: scroll;
+    padding-top: 0;
 
     &__header {
         display: flex;
