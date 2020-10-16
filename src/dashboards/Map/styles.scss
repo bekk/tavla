@@ -1,0 +1,15 @@
+@import '../../assets/styles/import.scss';
+@import '../../variables.scss';
+
+.bike-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.map-tile {
+    width: 100%;
+    float: left;
+    box-sizing: border-box;
+    padding: 0;
+    position: relative;
+}

@@ -46,6 +46,7 @@ export interface Settings {
 
 interface SettingsSetters {
     setBoardName: (boardName: string) => void
+    setCoordinates: (coordinates: Coordinates) => void
     setHiddenOperators: (hiddenOperators: ScooterOperator[]) => void
     setHiddenStations: (hiddenStations: string[]) => void
     setHiddenStops: (hiddenStops: string[]) => void
@@ -72,6 +73,7 @@ export const SettingsContext = createContext<
     null,
     {
         setBoardName: (): void => undefined,
+        setCoordinates: (): void => undefined,
         setHiddenOperators: (): void => undefined,
         setHiddenStations: (): void => undefined,
         setHiddenStops: (): void => undefined,
@@ -207,6 +209,13 @@ export function useSettings(): [Settings | null, SettingsSetters] {
         [set],
     )
 
+    const setCoordinates = useCallback(
+        (coordinates: Coordinates): void => {
+            set('coordinates', coordinates)
+        },
+        [set],
+    )
+
     const setHiddenOperators = useCallback(
         (newHiddenOperators: ScooterOperator[]): void => {
             set('hiddenOperators', newHiddenOperators)
@@ -320,6 +329,7 @@ export function useSettings(): [Settings | null, SettingsSetters] {
 
     const setters = {
         setBoardName,
+        setCoordinates,
         setHiddenOperators,
         setHiddenStations,
         setHiddenStops,
