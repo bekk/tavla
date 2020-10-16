@@ -1,12 +1,11 @@
 import { BikeRentalStation, Scooter } from '@entur/sdk'
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 
 import ReactMapGL, { Marker } from 'react-map-gl'
 
 import PositionPin from '../../assets/icons/positionPin'
 import ScooterOperatorLogo from '../../assets/icons/scooterOperatorLogo'
 
-import { DEFAULT_ZOOM } from '../../constants'
 import { useSettingsContext } from '../../settings'
 import { StopPlaceWithDepartures } from '../../types'
 
@@ -15,20 +14,24 @@ import StopPlaceTag from './StopPlaceTag'
 
 import './styles.scss'
 
-const MapView = ({
+const Map = ({
     stopPlaces,
     bikeRentalStations,
     scooters,
     walkTimes,
-    interactable,
+    interactive,
+    mapStyle,
+    latitude,
+    longitude,
+    zoom,
 }: Props): JSX.Element => {
-    const [settings, { setZoom }] = useSettingsContext()
+    const [, { setZoom }] = useSettingsContext()
     const [viewport, setViewPort] = useState({
-        latitude: settings?.coordinates?.latitude,
-        longitude: settings?.coordinates?.longitude,
+        latitude,
+        longitude,
         width: 'auto',
         height: '100%',
-        zoom: settings?.zoom ?? DEFAULT_ZOOM,
+        zoom,
         maxZoom: 18,
         minZoom: 13.5,
     })
@@ -36,18 +39,22 @@ const MapView = ({
         <ReactMapGL
             {...viewport}
             mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
-            mapStyle={process.env.MAPBOX_STYLE_MAPVIEW}
+            mapStyle={mapStyle || process.env.MAPBOX_STYLE_MAPVIEW}
             onViewportChange={
-                interactable
-                    ? (vp): void => {
-                          const { zoom, maxZoom, minZoom } = vp
+                interactive
+                    ? (newViewPort): void => {
+                          const {
+                              zoom: newZoom,
+                              maxZoom,
+                              minZoom,
+                          } = newViewPort
                           setZoom(zoom)
                           setViewPort({
-                              latitude: settings?.coordinates?.latitude,
-                              longitude: settings?.coordinates?.longitude,
+                              latitude,
+                              longitude,
                               width: 'auto',
                               height: '100%',
-                              zoom,
+                              zoom: newZoom,
                               maxZoom,
                               minZoom,
                           })
@@ -55,9 +62,13 @@ const MapView = ({
                     : undefined
             }
         >
-            {scooters?.map((sctr) => (
-                <Marker key={sctr.id} latitude={sctr.lat} longitude={sctr.lon}>
-                    <ScooterOperatorLogo logo={sctr.operator} size={24} />
+            {scooters?.map((scooter) => (
+                <Marker
+                    key={scooter.id}
+                    latitude={scooter.lat}
+                    longitude={scooter.lon}
+                >
+                    <ScooterOperatorLogo logo={scooter.operator} size={24} />
                 </Marker>
             ))}
             {stopPlaces?.map((stopPlace) =>
@@ -112,8 +123,11 @@ interface Props {
     bikeRentalStations?: BikeRentalStation[] | null
     scooters?: Scooter[] | null
     walkTimes?: Array<{ stopId: string; walkTime: number }> | null
-    interactable: boolean
-    zoomFromParent?: number | null
+    interactive: boolean
+    mapStyle?: string | undefined
+    latitude: number
+    longitude: number
+    zoom: number
 }
 
-export default MapView
+export default memo(Map)

@@ -12,7 +12,7 @@ import { StopPlaceWithDepartures } from '../../../types'
 function MapTile(data: Props): JSX.Element {
     return (
         <div className="maptile">
-            <MapView {...data} interactable={false}></MapView>
+            <MapView {...data} interactive={false}></MapView>
         </div>
     )
 }
@@ -22,6 +22,9 @@ interface Props {
     bikeRentalStations: BikeRentalStation[] | null
     scooters: Scooter[]
     walkTimes: Array<{ stopId: string; walkTime: number }> | null
+    latitude: number
+    longitude: number
+    zoom: number
 }
 
 export default MapTile

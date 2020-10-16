@@ -9,10 +9,14 @@ import {
 
 import MapView from '../../components/Map'
 
-import DepartureTag from './DepartureTag'
 import './styles.scss'
+import { useSettingsContext } from '../../settings'
+import { DEFAULT_ZOOM } from '../../constants'
 
+import DepartureTag from './DepartureTag'
 const MapDashboard = ({ history }: Props): JSX.Element => {
+    const [settings] = useSettingsContext()
+
     const stopPlacesWithDepartures = useStopPlacesWithDepartures()
     const bikeRentalStations = useBikeRentalStations()
     const walkTimes = useWalkTime(stopPlacesWithDepartures)
@@ -23,7 +27,7 @@ const MapDashboard = ({ history }: Props): JSX.Element => {
         HEADER_MARGIN
     return (
         <DashboardWrapper
-            className="map-tile"
+            className="map-view"
             history={history}
             stopPlacesWithDepartures={stopPlacesWithDepartures}
             bikeRentalStations={bikeRentalStations}
@@ -34,14 +38,17 @@ const MapDashboard = ({ history }: Props): JSX.Element => {
                     bikeRentalStations={bikeRentalStations}
                     stopPlaces={stopPlacesWithDepartures}
                     walkTimes={walkTimes}
-                    interactable={true}
+                    interactive={true}
+                    latitude={settings?.coordinates?.latitude ?? 0}
+                    longitude={settings?.coordinates?.longitude ?? 0}
+                    zoom={settings?.zoom ?? DEFAULT_ZOOM}
                 ></MapView>
                 <div className="departure-display">
-                    {stopPlacesWithDepartures?.map((sp) =>
-                        sp.departures.length ? (
+                    {stopPlacesWithDepartures?.map((stopPlace) =>
+                        stopPlace.departures.length ? (
                             <DepartureTag
-                                key={sp.id}
-                                stopPlace={sp}
+                                key={stopPlace.id}
+                                stopPlace={stopPlace}
                             ></DepartureTag>
                         ) : (
                             []

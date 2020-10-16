@@ -14,6 +14,10 @@ import {
     saveToLocalStorage,
 } from '../../settings/LocalStorage'
 
+import { useSettingsContext } from '../../settings'
+
+import { DEFAULT_ZOOM } from '../../constants'
+
 import DepartureTile from './DepartureTile'
 import BikeTile from './BikeTile'
 import MapTile from './MapTile'
@@ -41,6 +45,7 @@ function getDataGrid(
 }
 
 const EnturDashboard = ({ history }: Props): JSX.Element => {
+    const [settings] = useSettingsContext()
     const dashboardKey = history.location.key
 
     const bikeRentalStations = useBikeRentalStations()
@@ -157,6 +162,11 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                                 stopPlaces={stopPlacesWithDepartures}
                                 bikeRentalStations={bikeRentalStations}
                                 walkTimes={null}
+                                latitude={settings?.coordinates?.latitude ?? 0}
+                                longitude={
+                                    settings?.coordinates?.longitude ?? 0
+                                }
+                                zoom={settings?.zoom ?? DEFAULT_ZOOM}
                             />
                         </div>
                     ) : (
