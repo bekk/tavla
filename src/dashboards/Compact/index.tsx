@@ -16,7 +16,7 @@ import {
 
 import DepartureTile from './DepartureTile'
 import BikeTile from './BikeTile'
-import ScooterTile from './ScooterTile'
+import MapTile from './MapTile'
 
 import './styles.scss'
 
@@ -147,7 +147,12 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                                 maxWidthCols,
                             )}
                         >
-                            <ScooterTile
+                            <ResizeHandle
+                                size="32"
+                                className="resizeHandle"
+                                variant="dark"
+                            />
+                            <MapTile
                                 scooters={scooters}
                                 stopPlaces={stopPlacesWithDepartures}
                                 bikeRentalStations={bikeRentalStations}

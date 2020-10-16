@@ -1,13 +1,12 @@
 @import '../../../assets/styles/import.scss';
 @import '../../../variables.scss';
 
-.scootertile {
+.maptile {
     height: 100%;
     width: 25rem;
     background-color: var(--tavla-box-background-color);
     display: flex;
     flex-direction: column;
-    padding: 2rem;
 
     &__header {
         display: flex;
