@@ -1,10 +1,11 @@
 import React from 'react'
 
-import Voi from './../logos/Voi.svg'
-import Lime from './../logos/Lime.svg'
-import Tier from './../logos/Tier.svg'
-import Zvipp from './../logos/Zvipp.svg'
 import { ScooterOperator } from '@entur/sdk'
+
+import Voi from '../logos/Voi.svg'
+import Lime from '../logos/Lime.svg'
+import Tier from '../logos/Tier.svg'
+import Zvipp from '../logos/Zvipp.svg'
 
 function ScooterOperatorLogo({
     logo,
@@ -34,7 +35,7 @@ function ScooterOperatorLogo({
 interface Props {
     logo: ScooterOperator
     className?: string
-    size?: string
+    size?: number
 }
 
 export default ScooterOperatorLogo

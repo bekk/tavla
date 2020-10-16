@@ -1,15 +1,16 @@
 import React, { memo, useCallback } from 'react'
 import ReactMapGL, { Marker } from 'react-map-gl'
 
-import { Slider } from '../../../../components'
-
-import './styles.scss'
 import { Label } from '@entur/typography'
+import { Scooter } from '@entur/sdk'
+
+import { Slider } from '../../../../components'
 import { DEFAULT_ZOOM } from '../../../../constants'
 import { useSettingsContext } from '../../../../settings'
-import { Scooter } from '@entur/sdk'
 import ScooterOperatorLogo from '../../../../assets/icons/scooterOperatorLogo'
 import PositionPin from '../../../../assets/icons/positionPin'
+
+import './styles.scss'
 
 function ZoomEditor(props: Props): JSX.Element {
     const [settings] = useSettingsContext()
@@ -46,7 +47,7 @@ function ZoomEditor(props: Props): JSX.Element {
                 mapStyle={process.env.MAPBOX_STYLE}
             >
                 <Marker latitude={latitude} longitude={longitude}>
-                    <PositionPin size="24px" />
+                    <PositionPin size={24} />
                 </Marker>
                 {props.scooters
                     ? props.scooters.map((sctr) => (
@@ -57,7 +58,7 @@ function ZoomEditor(props: Props): JSX.Element {
                           >
                               <ScooterOperatorLogo
                                   logo={sctr.operator}
-                                  size="24px"
+                                  size={24}
                               />
                           </Marker>
                       ))
