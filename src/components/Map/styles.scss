@@ -1,0 +1,17 @@
+@import '../../assets/styles/import.scss';
+@import '../../variables.scss';
+
+.cluster-marker {
+    color: var(--tavla-background-color);
+    background: #fff;
+    border: 2px;
+    border-color: black;
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: auto;
+    height: 1.5rem;
+}

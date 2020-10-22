@@ -1,7 +1,12 @@
 import { BikeRentalStation, Scooter } from '@entur/sdk'
-import React, { useState, memo } from 'react'
+import React, { useState, memo, useRef } from 'react'
 
-import ReactMapGL, { Marker } from 'react-map-gl'
+import { ScooterIcon } from '@entur/icons'
+
+import ReactMapGL, { InteractiveMap, Marker } from 'react-map-gl'
+import useSupercluster from 'use-supercluster'
+
+import { ClusterProperties } from 'supercluster'
 
 import PositionPin from '../../assets/icons/positionPin'
 import ScooterOperatorLogo from '../../assets/icons/scooterOperatorLogo'
@@ -35,6 +40,36 @@ const Map = ({
         maxZoom: 18,
         minZoom: 13.5,
     })
+    const mapRef = useRef<InteractiveMap>(null)
+    const scooterpoints = scooters.map((scooter: Scooter) => ({
+        type: 'Feature' as 'Feature',
+        properties: {
+            cluster: false,
+            scooterId: scooter.id,
+            scooterOperator: scooter.operator,
+        },
+        geometry: {
+            type: 'Point' as 'Point',
+            coordinates: [scooter.lon, scooter.lat],
+        },
+    }))
+
+    const bounds = mapRef.current
+        ? (mapRef.current.getMap().getBounds().toArray().flat() as [
+              number,
+              number,
+              number,
+              number,
+          ])
+        : ([0, 0, 0, 0] as [number, number, number, number])
+
+    const { clusters } = useSupercluster({
+        points: scooterpoints,
+        bounds,
+        zoom,
+        options: { radius: 34, maxZoom: 24 },
+    })
+
     return (
         <ReactMapGL
             {...viewport}
@@ -48,7 +83,7 @@ const Map = ({
                               maxZoom,
                               minZoom,
                           } = newViewPort
-                          setZoom(zoom)
+                          setZoom(newZoom)
                           setViewPort({
                               latitude,
                               longitude,
@@ -61,8 +96,59 @@ const Map = ({
                       }
                     : undefined
             }
+            ref={mapRef}
         >
-            {scooters?.map((scooter) => (
+            {clusters.map((scooterCluster) => {
+                // every cluster point has coordinates
+                const [
+                    slongitude,
+                    slatitude,
+                ] = scooterCluster.geometry.coordinates
+                // the point may be either a cluster or a scooterpoint
+                const { cluster: isCluster } = scooterCluster.properties
+                let pointCount = 0
+                // the point can have clusterProperties or scooterProoperties
+                if (scooterCluster.properties.cluster)
+                    pointCount = (scooterCluster.properties as ClusterProperties)
+                        .point_count
+                // we have a cluster to render
+                if (isCluster) {
+                    return (
+                        <Marker
+                            key={`cluster-${scooterCluster.id}`}
+                            latitude={slatitude}
+                            longitude={slongitude}
+                        >
+                            <div
+                                key={'cluster-child' + scooterCluster.id}
+                                className="cluster-marker"
+                            >
+                                <ScooterIcon
+                                    style={{ marginRight: '0.15rem' }}
+                                ></ScooterIcon>
+                                <div style={{ marginTop: '0.15rem' }}>
+                                    {pointCount}
+                                </div>
+                            </div>
+                        </Marker>
+                    )
+                }
+
+                // we have a single point (crime) to render
+                return (
+                    <Marker
+                        key={scooterCluster.id}
+                        latitude={slatitude}
+                        longitude={slongitude}
+                    >
+                        <ScooterOperatorLogo
+                            logo={scooterCluster.properties.scooterOperator}
+                            size={24}
+                        />
+                    </Marker>
+                )
+            })}
+            {/* {scooters?.map((scooter) => (
                 <Marker
                     key={scooter.id}
                     latitude={scooter.lat}
@@ -70,7 +156,7 @@ const Map = ({
                 >
                     <ScooterOperatorLogo logo={scooter.operator} size={24} />
                 </Marker>
-            ))}
+            ))} */}
             {stopPlaces?.map((stopPlace) =>
                 stopPlace.departures.length > 0 ? (
                     <Marker
@@ -121,7 +207,7 @@ const Map = ({
 interface Props {
     stopPlaces?: StopPlaceWithDepartures[] | null
     bikeRentalStations?: BikeRentalStation[] | null
-    scooters?: Scooter[] | null
+    scooters: Scooter[]
     walkTimes?: Array<{ stopId: string; walkTime: number }> | null
     interactive: boolean
     mapStyle?: string | undefined
