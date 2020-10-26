@@ -41,7 +41,7 @@ const Map = ({
         minZoom: 13.5,
     })
     const mapRef = useRef<InteractiveMap>(null)
-    const scooterpoints = scooters.map((scooter: Scooter) => ({
+    const scooterpoints = scooters?.map((scooter: Scooter) => ({
         type: 'Feature' as 'Feature',
         properties: {
             cluster: false,
@@ -82,7 +82,7 @@ const Map = ({
         : ([0, 0, 0, 0] as [number, number, number, number])
 
     const { clusters } = useSupercluster({
-        points: scooterpoints,
+        points: scooterpoints ? scooterpoints : [],
         bounds,
         zoom,
         options: { radius: 34, maxZoom: 24 },
@@ -95,11 +95,11 @@ const Map = ({
         options: {
             radius: 45,
             maxZoom: 18,
-            map: (props) => ({
+            map: (props): {} => ({
                 bikesAvailable: props.bikesAvailable,
                 spacesAvailable: props.spacesAvailable,
             }),
-            reduce: (acc, props) => {
+            reduce: (acc, props): {} => {
                 acc.bikesAvailable += props.bikesAvailable
                 acc.spacesAvailable += props.spacesAvailable
                 return acc
@@ -282,7 +282,7 @@ const Map = ({
 interface Props {
     stopPlaces?: StopPlaceWithDepartures[] | null
     bikeRentalStations?: BikeRentalStation[] | null
-    scooters: Scooter[]
+    scooters?: Scooter[]
     walkTimes?: Array<{ stopId: string; walkTime: number }> | null
     interactive: boolean
     mapStyle?: string | undefined
