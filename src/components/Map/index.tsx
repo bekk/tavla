@@ -11,7 +11,6 @@ import { ClusterProperties } from 'supercluster'
 import PositionPin from '../../assets/icons/positionPin'
 import ScooterOperatorLogo from '../../assets/icons/scooterOperatorLogo'
 
-import { useSettingsContext } from '../../settings'
 import { StopPlaceWithDepartures } from '../../types'
 
 import BikeRentalStationTag from './BikeRentalStationTag'
@@ -30,7 +29,6 @@ const Map = ({
     longitude,
     zoom,
 }: Props): JSX.Element => {
-    const [, { setZoom }] = useSettingsContext()
     const [viewport, setViewPort] = useState({
         latitude,
         longitude,
@@ -120,7 +118,6 @@ const Map = ({
                               maxZoom,
                               minZoom,
                           } = newViewPort
-                          setZoom(newZoom)
                           setViewPort({
                               latitude,
                               longitude,

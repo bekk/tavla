@@ -19,7 +19,9 @@ function DistanceEditor(props: Props): JSX.Element {
 
     return (
         <div className="distance-editor">
-            <Label>Hvor langt unna vil du inkludere stoppesteder?</Label>
+            <Label style={{ marginBottom: '0.5rem' }}>
+                Hvor langt unna vil du inkludere stoppesteder?
+            </Label>
             <Slider
                 handleChange={handleDistanceUpdate}
                 value={distance}
@@ -27,7 +29,7 @@ function DistanceEditor(props: Props): JSX.Element {
                 max={MAX_DISTANCE}
                 step={1}
             />
-            <div className="slider__labels">
+            <div className="slider__labels" style={{ marginTop: '0.5rem' }}>
                 <div>1 m</div>
                 <div>{MAX_DISTANCE} m</div>
             </div>

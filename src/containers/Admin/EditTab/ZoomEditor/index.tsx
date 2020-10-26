@@ -29,7 +29,9 @@ function ZoomEditor(props: Props): JSX.Element {
 
     return (
         <div className="zoom-editor">
-            <Label>Juster zoom-nivå i kartet</Label>
+            <Label style={{ marginBottom: '0.5rem' }}>
+                Juster zoom-nivå i kartet
+            </Label>
             <Slider
                 handleChange={handleSliderChange}
                 value={zoom}
@@ -37,7 +39,7 @@ function ZoomEditor(props: Props): JSX.Element {
                 max={18}
                 step={0.1}
             />
-            <div style={{ marginBottom: '0.5rem' }}></div>
+            <div style={{ marginBottom: '1rem' }}></div>
             <ReactMapGL
                 latitude={latitude}
                 longitude={longitude}
