@@ -69,7 +69,7 @@ const Map = ({
             },
         }),
     )
-
+    viewport.zoom
     const bounds = mapRef.current
         ? (mapRef.current.getMap().getBounds().toArray().flat() as [
               number,
@@ -82,14 +82,14 @@ const Map = ({
     const { clusters } = useSupercluster({
         points: scooterpoints ? scooterpoints : [],
         bounds,
-        zoom,
-        options: { radius: 34, maxZoom: 24 },
+        zoom: viewport.zoom,
+        options: { radius: 38, maxZoom: 18 },
     })
 
     const { clusters: stationClusters } = useSupercluster({
         points: bikeRentalStationPoints ? bikeRentalStationPoints : [],
         bounds,
-        zoom,
+        zoom: viewport.zoom,
         options: {
             radius: 45,
             maxZoom: 18,
@@ -182,15 +182,6 @@ const Map = ({
                     </Marker>
                 )
             })}
-            {/* {scooters?.map((scooter) => (
-                <Marker
-                    key={scooter.id}
-                    latitude={scooter.lat}
-                    longitude={scooter.lon}
-                >
-                    <ScooterOperatorLogo logo={scooter.operator} size={24} />
-                </Marker>
-            ))} */}
             {stopPlaces?.map((stopPlace) =>
                 stopPlace.departures.length > 0 ? (
                     <Marker
@@ -253,19 +244,6 @@ const Map = ({
                     </Marker>
                 )
             })}
-            {/* {bikeRentalStations?.map((station) => (
-                <Marker
-                    key={station.id}
-                    latitude={station.latitude}
-                    longitude={station.longitude}
-                    marker-size="large"
-                >
-                    <BikeRentalStationTag
-                        bikes={station.bikesAvailable ?? 0}
-                        spaces={station.spacesAvailable ?? 0}
-                    ></BikeRentalStationTag>
-                </Marker>
-            ))} */}
             <Marker
                 latitude={viewport.latitude ?? 0}
                 longitude={viewport.longitude ?? 0}
