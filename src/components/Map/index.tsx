@@ -53,6 +53,24 @@ const Map = ({
             coordinates: [scooter.lon, scooter.lat],
         },
     }))
+    const bikeRentalStationPoints = bikeRentalStations?.map(
+        (bikeRentalStation: BikeRentalStation) => ({
+            type: 'Feature' as 'Feature',
+            properties: {
+                cluster: false,
+                stationId: bikeRentalStation.id,
+                bikesAvailable: bikeRentalStation.bikesAvailable,
+                spacesAvailable: bikeRentalStation.spacesAvailable,
+            },
+            geometry: {
+                type: 'Point' as 'Point',
+                coordinates: [
+                    bikeRentalStation.longitude,
+                    bikeRentalStation.latitude,
+                ],
+            },
+        }),
+    )
 
     const bounds = mapRef.current
         ? (mapRef.current.getMap().getBounds().toArray().flat() as [
@@ -68,6 +86,25 @@ const Map = ({
         bounds,
         zoom,
         options: { radius: 34, maxZoom: 24 },
+    })
+
+    const { clusters: stationClusters } = useSupercluster({
+        points: bikeRentalStationPoints ? bikeRentalStationPoints : [],
+        bounds,
+        zoom,
+        options: {
+            radius: 45,
+            maxZoom: 18,
+            map: (props) => ({
+                bikesAvailable: props.bikesAvailable,
+                spacesAvailable: props.spacesAvailable,
+            }),
+            reduce: (acc, props) => {
+                acc.bikesAvailable += props.bikesAvailable
+                acc.spacesAvailable += props.spacesAvailable
+                return acc
+            },
+        },
     })
 
     return (
@@ -123,11 +160,11 @@ const Map = ({
                                 key={'cluster-child' + scooterCluster.id}
                                 className="cluster-marker"
                             >
-                                <ScooterIcon
-                                    style={{ marginRight: '0.15rem' }}
-                                ></ScooterIcon>
-                                <div style={{ marginTop: '0.15rem' }}>
-                                    {pointCount}
+                                <ScooterIcon className="scooter-icon"></ScooterIcon>
+                                <div className="point-count">
+                                    {pointCount < 10
+                                        ? pointCount
+                                        : `${pointCount}+`}
                                 </div>
                             </div>
                         </Marker>
@@ -137,7 +174,7 @@ const Map = ({
                 // we have a single point (crime) to render
                 return (
                     <Marker
-                        key={scooterCluster.id}
+                        key={scooterCluster.properties.scooterId}
                         latitude={slatitude}
                         longitude={slongitude}
                     >
@@ -181,7 +218,45 @@ const Map = ({
                     []
                 ),
             )}
-            {bikeRentalStations?.map((station) => (
+            {stationClusters.map((stationCluster) => {
+                const [
+                    slongitude,
+                    slatitude,
+                ] = stationCluster.geometry.coordinates
+
+                const { cluster: isCluster } = stationCluster.properties
+                if (isCluster) {
+                    return (
+                        <Marker
+                            key={stationCluster.id}
+                            latitude={slatitude}
+                            longitude={slongitude}
+                            marker-size="large"
+                        >
+                            <BikeRentalStationTag
+                                bikes={stationCluster.properties.bikesAvailable}
+                                spaces={
+                                    stationCluster.properties.spacesAvailable
+                                }
+                            ></BikeRentalStationTag>
+                        </Marker>
+                    )
+                }
+                return (
+                    <Marker
+                        key={stationCluster.properties.stationId}
+                        latitude={slatitude}
+                        longitude={slongitude}
+                        marker-size="large"
+                    >
+                        <BikeRentalStationTag
+                            bikes={stationCluster.properties.bikesAvailable}
+                            spaces={stationCluster.properties.spacesAvailable}
+                        ></BikeRentalStationTag>
+                    </Marker>
+                )
+            })}
+            {/* {bikeRentalStations?.map((station) => (
                 <Marker
                     key={station.id}
                     latitude={station.latitude}
@@ -193,7 +268,7 @@ const Map = ({
                         spaces={station.spacesAvailable ?? 0}
                     ></BikeRentalStationTag>
                 </Marker>
-            ))}
+            ))} */}
             <Marker
                 latitude={viewport.latitude ?? 0}
                 longitude={viewport.longitude ?? 0}
