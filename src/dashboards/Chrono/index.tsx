@@ -3,6 +3,7 @@ import { WidthProvider, Responsive } from 'react-grid-layout'
 
 import { useBikeRentalStations, useStopPlacesWithDepartures } from '../../logic'
 import DashboardWrapper from '../../containers/DashboardWrapper'
+import ResizeHandle from '../../assets/icons/ResizeHandle'
 
 import {
     getFromLocalStorage,
@@ -16,10 +17,13 @@ import './styles.scss'
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
-function getDataGrid(index: number): { [key: string]: number } {
+function getDataGrid(
+    index: number,
+    maxWidth: number,
+): { [key: string]: number } {
     return {
         w: 1,
-        maxW: 1,
+        maxW: maxWidth,
         minH: 1,
         h: 4,
         x: index,
@@ -33,7 +37,6 @@ const ChronoDashboard = ({ history }: Props): JSX.Element => {
     const bikeRentalStations = useBikeRentalStations()
     let stopPlacesWithDepartures = useStopPlacesWithDepartures()
 
-    // Remove stop places without departures
     if (stopPlacesWithDepartures) {
         stopPlacesWithDepartures = stopPlacesWithDepartures.filter(
             ({ departures }) => departures.length > 0,
@@ -63,6 +66,8 @@ const ChronoDashboard = ({ history }: Props): JSX.Element => {
         xxs: 1,
     }
 
+    const maxWidthCols = cols.lg + 1
+
     return (
         <DashboardWrapper
             className="chrono"
@@ -86,16 +91,29 @@ const ChronoDashboard = ({ history }: Props): JSX.Element => {
                     {(stopPlacesWithDepartures || []).map((stop, index) => (
                         <div
                             key={index.toString()}
-                            data-grid={getDataGrid(index)}
+                            data-grid={getDataGrid(index, maxWidthCols)}
                         >
+                            <ResizeHandle
+                                size={32}
+                                className="resizeHandle"
+                                variant="light"
+                            />
                             <DepartureTile stopPlaceWithDepartures={stop} />
                         </div>
                     ))}
                     {bikeRentalStations && anyBikeRentalStations ? (
                         <div
                             key={numberOfStopPlaces.toString()}
-                            data-grid={getDataGrid(numberOfStopPlaces)}
+                            data-grid={getDataGrid(
+                                numberOfStopPlaces,
+                                maxWidthCols,
+                            )}
                         >
+                            <ResizeHandle
+                                size={32}
+                                className="resizeHandle"
+                                variant="light"
+                            />
                             <BikeTile stations={bikeRentalStations} />
                         </div>
                     ) : (
