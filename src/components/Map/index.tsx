@@ -1,8 +1,6 @@
 import { BikeRentalStation, Scooter } from '@entur/sdk'
 import React, { useState, memo, useRef } from 'react'
 
-import { ScooterIcon } from '@entur/icons'
-
 import ReactMapGL, { InteractiveMap, Marker } from 'react-map-gl'
 import useSupercluster from 'use-supercluster'
 
@@ -17,6 +15,7 @@ import BikeRentalStationTag from './BikeRentalStationTag'
 import StopPlaceTag from './StopPlaceTag'
 
 import './styles.scss'
+import ScooterMarkerTag from './ScooterMarkerTag'
 
 const Map = ({
     stopPlaces,
@@ -133,52 +132,36 @@ const Map = ({
             ref={mapRef}
         >
             {clusters.map((scooterCluster) => {
-                // every cluster point has coordinates
                 const [
                     slongitude,
                     slatitude,
                 ] = scooterCluster.geometry.coordinates
-                // the point may be either a cluster or a scooterpoint
+
                 const { cluster: isCluster } = scooterCluster.properties
                 let pointCount = 0
-                // the point can have clusterProperties or scooterProoperties
-                if (scooterCluster.properties.cluster)
+
+                if (isCluster)
                     pointCount = (scooterCluster.properties as ClusterProperties)
                         .point_count
-                // we have a cluster to render
-                if (isCluster) {
-                    return (
-                        <Marker
-                            key={`cluster-${scooterCluster.id}`}
-                            latitude={slatitude}
-                            longitude={slongitude}
-                        >
-                            <div
-                                key={'cluster-child' + scooterCluster.id}
-                                className="cluster-marker"
-                            >
-                                <ScooterIcon className="scooter-icon"></ScooterIcon>
-                                <div className="point-count">
-                                    {pointCount < 10
-                                        ? pointCount
-                                        : `${pointCount}+`}
-                                </div>
-                            </div>
-                        </Marker>
-                    )
-                }
 
-                // we have a single point (crime) to render
                 return (
                     <Marker
-                        key={scooterCluster.properties.scooterId}
+                        key={
+                            pointCount
+                                ? `cluster-${scooterCluster.id}`
+                                : scooterCluster.properties.scooterId
+                        }
                         latitude={slatitude}
                         longitude={slongitude}
                     >
-                        <ScooterOperatorLogo
-                            logo={scooterCluster.properties.scooterOperator}
-                            size={24}
-                        />
+                        <ScooterMarkerTag
+                            pointCount={pointCount}
+                            operator={
+                                pointCount
+                                    ? null
+                                    : scooterCluster.properties.scooterOperator
+                            }
+                        ></ScooterMarkerTag>
                     </Marker>
                 )
             })}
@@ -213,26 +196,14 @@ const Map = ({
                 ] = stationCluster.geometry.coordinates
 
                 const { cluster: isCluster } = stationCluster.properties
-                if (isCluster) {
-                    return (
-                        <Marker
-                            key={stationCluster.id}
-                            latitude={slatitude}
-                            longitude={slongitude}
-                            marker-size="large"
-                        >
-                            <BikeRentalStationTag
-                                bikes={stationCluster.properties.bikesAvailable}
-                                spaces={
-                                    stationCluster.properties.spacesAvailable
-                                }
-                            ></BikeRentalStationTag>
-                        </Marker>
-                    )
-                }
+
                 return (
                     <Marker
-                        key={stationCluster.properties.stationId}
+                        key={
+                            isCluster
+                                ? stationCluster.id
+                                : stationCluster.properties.stationId
+                        }
                         latitude={slatitude}
                         longitude={slongitude}
                         marker-size="large"
