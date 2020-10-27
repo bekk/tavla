@@ -115,7 +115,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             data-grid={getDataGrid(index, maxWidthCols)}
                         >
                             <ResizeHandle
-                                size="32"
+                                size={32}
                                 className="resizeHandle"
                                 variant="light"
                             />
@@ -134,7 +134,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             )}
                         >
                             <ResizeHandle
-                                size="32"
+                                size={32}
                                 className="resizeHandle"
                                 variant="light"
                             />
@@ -153,7 +153,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             )}
                         >
                             <ResizeHandle
-                                size="32"
+                                size={32}
                                 className="resizeHandle"
                                 variant="dark"
                             />

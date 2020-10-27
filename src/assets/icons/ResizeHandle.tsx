@@ -61,7 +61,7 @@ function ResizeHandle({ className, size, variant }: Props): JSX.Element | null {
 
 interface Props {
     className?: string
-    size?: string
+    size?: number
     variant?: 'light' | 'dark'
 }
 
