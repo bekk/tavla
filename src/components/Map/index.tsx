@@ -7,7 +7,6 @@ import useSupercluster from 'use-supercluster'
 import { ClusterProperties } from 'supercluster'
 
 import PositionPin from '../../assets/icons/positionPin'
-import ScooterOperatorLogo from '../../assets/icons/scooterOperatorLogo'
 
 import { StopPlaceWithDepartures } from '../../types'
 
@@ -78,7 +77,7 @@ const Map = ({
           ])
         : ([0, 0, 0, 0] as [number, number, number, number])
 
-    const { clusters } = useSupercluster({
+    const { clusters: scooterClusters } = useSupercluster({
         points: scooterpoints ? scooterpoints : [],
         bounds,
         zoom: viewport.zoom,
@@ -131,7 +130,7 @@ const Map = ({
             }
             ref={mapRef}
         >
-            {clusters.map((scooterCluster) => {
+            {scooterClusters.map((scooterCluster) => {
                 const [
                     slongitude,
                     slatitude,
@@ -228,7 +227,7 @@ const Map = ({
 interface Props {
     stopPlaces?: StopPlaceWithDepartures[] | null
     bikeRentalStations?: BikeRentalStation[] | null
-    scooters?: Scooter[]
+    scooters?: Scooter[] | null
     walkTimes?: Array<{ stopId: string; walkTime: number }> | null
     interactive: boolean
     mapStyle?: string | undefined

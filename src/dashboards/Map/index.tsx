@@ -15,6 +15,7 @@ import { useSettingsContext } from '../../settings'
 import { DEFAULT_ZOOM } from '../../constants'
 
 import DepartureTag from './DepartureTag'
+
 const MapDashboard = ({ history }: Props): JSX.Element => {
     const [settings] = useSettingsContext()
 

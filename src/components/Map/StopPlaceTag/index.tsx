@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { colors } from '@entur/tokens'
 import { getIcon, getIconColor } from '../../../utils'
 
